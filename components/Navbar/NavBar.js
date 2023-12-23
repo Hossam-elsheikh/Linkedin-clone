@@ -13,7 +13,7 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import Link from "next/link";
 function NavBar() {
   return (
-    <div className="flex bg-white justify-evenly items-center sticky top-0">
+    <div className="flex bg-white justify-evenly items-center sticky top-0 z-50">
       <div className="flex items-center gap-2">
         <LinkedInIcon className="logo" />
         <div className="relative h-9">
