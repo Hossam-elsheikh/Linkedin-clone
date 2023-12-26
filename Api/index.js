@@ -2,6 +2,8 @@ const express = require('express')
 const cors = require('cors')
 const app = express()
 const mongoose = require('mongoose')
+const userRoutes = require('../Api/routes/user')
+const postRoutes = require('../Api/routes/post')
 
 const port = 4010
 app.listen(port, ()=> console.log(`Listening on port ${port}`))
@@ -14,6 +16,8 @@ app.use(
 
 //middlewares
 app.use(express.json())
+app.use('/user', userRoutes)
+app.use('/post', postRoutes)
 
 //not found middleware
 app.use('*', (req, res, next)=> {
