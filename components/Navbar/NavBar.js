@@ -13,7 +13,7 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import Link from "next/link";
 function NavBar() {
   return (
-    <div className="flex bg-white justify-evenly items-center sticky top-0 z-50">
+    <div className="flex bg-white justify-evenly items-center sticky top-0 z-30">
       <div className="flex items-center gap-2">
         <LinkedInIcon className="logo" />
         <div className="relative h-9">
@@ -34,7 +34,7 @@ function NavBar() {
         <NavLink href='/notifications' Icon={NotificationsIcon} title="Notifications" className='hidden xxxs:flex'/>
         <NavLink
           dropdown={true}
-          avatar="https://media.licdn.com/dms/image/D4D35AQG8OmfeytWhgA/profile-framedphoto-shrink_400_400/0/1699559892633?e=1703278800&v=beta&t=u0PecOUSe7qOI2tHOmWHPFH4W_FT30Ek4VN-9fMExFQ"
+          avatar="https://i.postimg.cc/523pcPrD/new.png"
           title="Me"
         />
         <div className="border-l-2 border-gray-400 h-9 hidden sm:block"></div>
