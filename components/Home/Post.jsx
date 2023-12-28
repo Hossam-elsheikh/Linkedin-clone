@@ -2,7 +2,6 @@ import Container from "@/app/ui/Container";
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Avatar } from "@mui/material";
 import PublicIcon from "@mui/icons-material/Public";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import ClearIcon from "@mui/icons-material/Clear";

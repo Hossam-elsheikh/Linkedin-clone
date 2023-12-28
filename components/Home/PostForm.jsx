@@ -19,7 +19,9 @@ function PostForm() {
               height: "50px",
               
             }}/>
-          <button className='border text-sm border-gray-300 p-3 rounded-full text-left text-gray-600 w-full hover:bg-gray-300' onClick={()=> setModal(true)}>Start a post</button>
+          <button className='border text-sm border-gray-300 p-3 rounded-full text-left text-gray-600 w-full hover:bg-gray-300' onClick={()=> {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            setModal(true)}}>Start a post</button>
             </div>
             <div className='py-1 flex justify-around'>
                 <div className='flex items-center gap-1 hover:bg-gray-200 cursor-pointer p-2 rounded'>

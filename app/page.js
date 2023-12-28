@@ -10,6 +10,7 @@ import ModalContextProvider, { ModalContext } from "@/contexts/ModalContext";
 import { useContext } from "react";
 import Modal from "@/components/Modal/Modal";
 import Portal from "@/components/Modal/Overlay";
+import AddPost from "@/components/Home/AddPost";
 
 export default function Home() {
   const { showModal, setModal } = useContext(ModalContext);
@@ -18,13 +19,7 @@ export default function Home() {
     <>
       {showModal && (
         <Portal>
-          <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center z-40">
-            <div
-              className="opacity-60 bg-gray-800 w-full h-full absolute top-0"
-              onClick={() => setModal(false)}
-            ></div>
-            <Container className="z-40 p-3">trial</Container>
-          </div>
+          <AddPost />
         </Portal>
       )}
       <div className={`grid grid-cols-10 w-full xl:w-3/4  m-auto p-0 gap-6 relative sm:p-5`}>
