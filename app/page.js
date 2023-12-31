@@ -6,7 +6,7 @@ import Details from "@/components/Home/Details";
 import Posts from "@/components/Home/Posts";
 import Recommendations from "@/components/Home/Recommendations";
 import Footer from "@/components/Footer/Footer";
-import ModalContextProvider, { ModalContext } from "@/contexts/ModalContext";
+import ModalContextProvider, { ModalContext } from "@/context/ModalContext";
 import { useContext } from "react";
 import Modal from "@/components/Modal/Modal";
 import Portal from "@/components/Modal/Overlay";
@@ -28,6 +28,7 @@ export default function Home() {
         </div>
         <div className="col-span-10 sm:col-span-7 lg:col-span-5 ">
           <Posts />
+          
         </div>
         <div className="col-span-10 sm:col-span-3 hidden lg:block">
           <Recommendations />

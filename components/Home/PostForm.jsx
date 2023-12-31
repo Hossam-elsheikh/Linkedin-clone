@@ -4,7 +4,7 @@ import { Avatar } from "@mui/material";
 import ImageIcon from '@mui/icons-material/Image';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import ArticleIcon from '@mui/icons-material/Article';
-import  { ModalContext } from '@/contexts/ModalContext';
+import  { ModalContext } from '@/context/ModalContext';
 import { useContext } from 'react';
 function PostForm() {
   const {showModal, setModal}=useContext(ModalContext)

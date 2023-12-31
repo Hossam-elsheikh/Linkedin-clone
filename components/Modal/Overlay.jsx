@@ -1,4 +1,4 @@
-import { ModalContext } from "@/contexts/ModalContext";
+import { ModalContext } from "@/context/ModalContext";
 import { useContext, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 

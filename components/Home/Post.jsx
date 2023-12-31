@@ -22,20 +22,29 @@ const Post = () => {
     <Container className="px-0 py-2 ">
       {/* Post Header */}
       <div className="flex justify-between px-3 py-2">
-        <UserCircle name='Hossam Mohamed' title='MERN stack web developer' isPost={true} img='https://i.postimg.cc/523pcPrD/new.png' />
-        
+        <UserCircle
+          name="Hossam Mohamed"
+          title="MERN stack web developer"
+          isPost={true}
+          img="https://i.postimg.cc/523pcPrD/new.png"
+        />
+
         <div className="flex gap-2">
           <MoreHorizIcon className="hover:bg-gray-200 rounded-full text-gray-500 cursor-pointer" />
           <ClearIcon className="hover:bg-gray-200 rounded-full text-gray-500 cursor-pointer" />
         </div>
       </div>
       {/* Post Content */}
-      <div className="" >
+      <div className="">
         <p className="text-sm p-3" dir="rtl">
           ياريت كله يشاركنا صورته في الجيم يشبب عاوزين نبوظ لينكد ان
         </p>
         <div>
-            <img className="p-0" src='https://i.postimg.cc/tT01yGkF/image.png' alt="essam"/>
+          <img
+            className="p-0"
+            src="https://i.postimg.cc/tT01yGkF/image.png"
+            alt="essam"
+          />
         </div>
       </div>
       {/* Post Interactions */}
@@ -101,7 +110,7 @@ const Post = () => {
         </div>
       </div>
       {/* Add Comment */}
-      <AddComment type='Add a Comment...'/>
+      <AddComment type="Add a Comment..." />
       {/* Comments Filter */}
       <div className="flex gap-.5 px-3 font-semibold text-gray-500 text-xs cursor-pointer items-center p-2">
         <p>Most Relevant</p>
@@ -109,7 +118,9 @@ const Post = () => {
       </div>
       {/* Comments */}
       <Comment />
-      <p className="hover:bg-gray-200 cursor-pointer rounded py-1 px-2 text-xs text-gray-500 font-semibold w-fit">Load More Comments</p>
+      <p className="hover:bg-gray-200 cursor-pointer rounded py-1 mx-1 px-2 text-xs text-gray-500 font-semibold w-fit">
+        Load More Comments
+      </p>
     </Container>
   );
 };

@@ -10,7 +10,7 @@ import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import PostOption from "@/app/ui/PostOption";
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import { ModalContext } from "@/contexts/ModalContext";
+import { ModalContext } from "@/context/ModalContext";
 import { Tooltip } from 'react-tooltip'
 
 const AddPost = () => {
