@@ -19,7 +19,7 @@ const Portal = ({ children, hideModal }) => {
   useEffect(() => {
     setMounted(true);
     document.documentElement.style.overflow = "hidden";
-
+    window.scrollTo({ top: 0 })
     return () => {
       setMounted(false);
 

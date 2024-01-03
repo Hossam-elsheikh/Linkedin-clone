@@ -28,7 +28,7 @@ function Details() {
           }}
         />
         <div className="text-center my-3">
-          <Link href="#" className="font-semibold text-sm mb-1">
+          <Link href="/profile" className="font-semibold text-sm mb-1 hover:text-blue-600 hover:underline">
             Hossam Mohamed
           </Link>
           <p className="text-xs font-light">Frontend Developer</p>
