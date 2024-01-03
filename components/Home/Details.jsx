@@ -9,7 +9,7 @@ import AddIcon from "@mui/icons-material/Add";
 function Details() {
   return (
     <>
-      <Container className="p-0 ">
+      <Container className="p-0">
         <div className="h-20">
           <img
             className="object-cover h-16 rounded-t-md w-full"
@@ -18,7 +18,7 @@ function Details() {
           />
         </div>
         <Avatar
-          src="https://media.licdn.com/dms/image/D4D35AQG8OmfeytWhgA/profile-framedphoto-shrink_400_400/0/1699559892633?e=1703278800&v=beta&t=u0PecOUSe7qOI2tHOmWHPFH4W_FT30Ek4VN-9fMExFQ"
+        src='https://i.postimg.cc/523pcPrD/new.png'
           sx={{
             width: "70px",
             height: "70px",
@@ -28,7 +28,7 @@ function Details() {
           }}
         />
         <div className="text-center my-3">
-          <Link href="#" className="font-semibold text-sm mb-1">
+          <Link href="/profile" className="font-semibold text-sm mb-1 hover:text-blue-600 hover:underline">
             Hossam Mohamed
           </Link>
           <p className="text-xs font-light">Frontend Developer</p>
