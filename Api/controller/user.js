@@ -6,6 +6,7 @@ const crypto = require('crypto')
 
 const addUser = async (req, res) => {
     const insertUser = req.body
+    console.log(req.body);
     try {
         const newUser = await userModel.create(insertUser)
         const token = await new Token({
@@ -47,7 +48,6 @@ const editUser = async (req, res) => {
             { name, email, password, phoneNumber, location, profilePicture, profileCover },
             { new: true })
         res.status(200).json({ message: "user updated successfully", user: patchingUser })
-
     } catch (err) {
         res.status(500).json({ message: err.message })
     }

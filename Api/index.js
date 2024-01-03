@@ -29,9 +29,10 @@ app.use((err, req, res, next)=>{
     res.status(500).json({message: 'there is something went wrong with your API'})
     next(err)
 })
+const link = 'mongodb+srv://essamazoz9:lx0j6WxAIY69DPQP@linkedin.wu0hroe.mongodb.net/?retryWrites=true&w=majority'
 
 mongoose
-.connect('mongodb://127.0.0.1:27017/linkedinClone')
+.connect(link)
 .then(()=>{
     console.log('connected to database');
 })
