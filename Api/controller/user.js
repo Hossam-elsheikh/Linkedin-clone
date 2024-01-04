@@ -20,6 +20,7 @@ const addUser = async (req, res) => {
     }
 }
 
+
 const getUser = async (req, res) => {
     const userId = await req.params.id
     try {

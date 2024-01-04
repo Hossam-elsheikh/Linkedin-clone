@@ -3,6 +3,7 @@ import React, { useState } from "react";
 
 import Container from "../ui/Container";
 import axios from "axios";
+import axiosInstance from '../../axios'
 import Link from "next/link";
 import { redirect } from 'next/navigation'
 
@@ -17,7 +18,7 @@ const page = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
-      const data = await axios.post(`http://localhost:4010/user/addUser`,form);
+      const data = await axiosInstance.post(`user/addUser`,form);
       console.log(data);
       redirect('/signin')
 
