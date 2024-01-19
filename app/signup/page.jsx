@@ -7,7 +7,7 @@ import axiosInstance from '../../axios'
 import Link from "next/link";
 import { redirect } from 'next/navigation'
 
-const page = () => {
+const Page = () => {
   const [form, setForm] = useState({
     name: "",
     jobTitle: "",
