@@ -6,7 +6,7 @@ import axios from "axios";
 import axiosInstance from '../../axios'
 import Link from "next/link";
 import { redirect } from 'next/navigation'
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation"; 
 
 const Page = () => {
   const router = useRouter()
