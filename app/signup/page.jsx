@@ -9,17 +9,18 @@ import { redirect } from 'next/navigation'
 import { useRouter } from "next/navigation"; 
 
 const Page = () => {
+  const router = useRouter()
   const [form, setForm] = useState({
     name: "",
     jobTitle: "",
     email: "",
     password: "",
-    phoneNumber:+20
+    phoneNumber:"",
   });
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
-      const data = await axiosInstance.post(`user/addUser`,form);
+      const data = await axiosInstance.post('user/addUser',form);
       console.log(data);
       // redirect('/signin') 
       router.push('/signin')
