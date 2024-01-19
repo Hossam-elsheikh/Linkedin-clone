@@ -15,17 +15,17 @@ const addUser = async (req, res) => {
         }).save()
         res.status(200).json({ message: 'new user added', user: newUser })
     } catch (err) {
-        console.error('Error in login:', err);
+        console.error('Error in signup:', err);
         res.status(500).json({ message: err.message })
     }
 }
 
 
 const getUser = async (req, res) => {
-    const userId = await req.params.id
+    const userId = req.params.id
     try {
-        wantedUser = await userModel.findById(userId)
-        res.status(200).json({ message: "the user u want", user: userId })
+        wantedUser = await userModel.findOne({_id:userId})
+        res.status(200).json({ message: "the user u want", user: wantedUser })
     } catch (err) {
         res.status(500).json({ message: err.message })
     }
@@ -78,8 +78,9 @@ const login = async (req, res) => {
         if (!valid) {
             res.status(401).json({ message: 'invalid password' })
         }
-        console.log('Secret key:', process.env.SECRET);
+        // console.log('Secret key:', process.env.SECRET);
         const token = jwt.sign({ id: user.id, name: user.name }, process.env.SECRET)
+        res.cookie('token', token, { httpOnly: true, maxAge: 7 * 24 * 60 * 60 * 1000 }); 
         res.status(200).json({message: "logged successfully", id: user.id, token: token })
     } catch (err) {
         console.error('Error in login:', err); 
