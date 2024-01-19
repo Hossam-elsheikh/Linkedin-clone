@@ -22,7 +22,7 @@ const Page = () => {
     try {
       const data = await axiosInstance.post('user/addUser',form);
       console.log(data);
-      // redirect('/signin')
+      // redirect('/signin') 
       router.push('/signin')
 
     } catch (err) {
