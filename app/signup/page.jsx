@@ -6,21 +6,24 @@ import axios from "axios";
 import axiosInstance from '../../axios'
 import Link from "next/link";
 import { redirect } from 'next/navigation'
+import { useRouter } from "next/navigation";
 
-const page = () => {
+const Page = () => {
+  const router = useRouter()
   const [form, setForm] = useState({
     name: "",
     jobTitle: "",
     email: "",
     password: "",
-    phoneNumber:+20
+    phoneNumber:"",
   });
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
-      const data = await axiosInstance.post(`user/addUser`,form);
+      const data = await axiosInstance.post('user/addUser',form);
       console.log(data);
-      redirect('/signin')
+      // redirect('/signin')
+      router.push('/signin')
 
     } catch (err) {
       console.log("error", err);
@@ -152,4 +155,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
