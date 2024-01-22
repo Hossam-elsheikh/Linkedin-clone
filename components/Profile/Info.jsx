@@ -4,24 +4,22 @@ import { Avatar } from "@mui/material";
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import EditIcon from '@mui/icons-material/Edit';
 import Link from 'next/link';
-import useFetchUser from "../../app/profile/useFetchUser";
-import Cookies from 'js-cookie';
+import useFetchUser from "../useHooks/useFetchUser";
 
 const Info = () => {
-  const userId = Cookies.get('userId');
-  const userDetails = useFetchUser(userId);
+  const userDetails = useFetchUser();
+  // console.log(userDetails.user?.name);
 
   return (
     <Container className='relative'>
-      {Object.entries(userDetails).map(([key, value]) => (
-        <div key={key}>
-          {value.profileCover && (
-            <img className='object-cover h-48 rounded-t-md w-full' src={value.profileCover} alt="" />
+    
+          {userDetails.user?.profileCover && (
+            <img className='object-cover h-48 rounded-t-md w-full' src={userDetails.user?.profileCover} alt="" />
           )}
 
           <div className='relative'>
             <Avatar
-              src={value.profilePicture}
+              src={userDetails.user?.profilePicture}
               sx={{
                 width: "160px",
                 height: "155px",
@@ -36,15 +34,15 @@ const Info = () => {
 
           <div className='px-7 py-3 flex flex-col'>
             <div className='flex justify-between'>
-              <h2 className='text-gray-700 font-semibold text-xl'>{value.name}</h2>
+              <h2 className='text-gray-700 font-semibold text-xl'>{userDetails.user?.name}</h2>
               <EditIcon className='text-gray-600 rounded-full p-1 text-3xl hover:bg-gray-200 cursor-pointer' />
             </div>
-            <p className='text-gray-600'>{value.jobTitle}</p>
+            <p className='text-gray-600'>{userDetails.user?.jobTitle}</p>
             <p className='text-gray-400 text-sm'>
-              {value.location}
+              {userDetails.user?.location}
               <Link href='#' className='text-blue-600 font-semibold hover:underline'>Contact info</Link>
             </p>
-            <Link href='#' className='text-blue-600 font-semibold hover:underline text-sm pt-1'>{value.connections}</Link>
+            <Link href='#' className='text-blue-600 font-semibold hover:underline text-sm pt-1'>{userDetails.user?.connections}</Link>
 
             <div className='flex gap-2 py-3'>
               <button className='bg-blue-600 text-white rounded-full py-1 font-semibold px-4 hover:bg-blue-800'>Open to</button>
@@ -52,8 +50,7 @@ const Info = () => {
               <button className='outline outline-1 outline-gray-600 text-gray-600 rounded-full py-1 font-semibold px-4 hover:outline-gray-800 hover:outline-2 hover:bg-gray-200'>More</button>
             </div>
           </div>
-        </div>
-      ))}
+        
     </Container>
   );
 };

@@ -11,7 +11,10 @@ import SearchIcon from "@mui/icons-material/Search";
 import NavLink from "../NavLink";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import Link from "next/link";
+import useFetchUser from "../useHooks/useFetchUser";
 function NavBar() {
+  const userDetails = useFetchUser()
+
   return (
     <div className="flex bg-white justify-evenly items-center sticky top-0 z-30">
       <div className="flex items-center gap-2">
@@ -34,7 +37,8 @@ function NavBar() {
         <NavLink href='/notifications' Icon={NotificationsIcon} title="Notifications" className='hidden xxxs:flex'/>
         <NavLink
           dropdown={true}
-          avatar="https://i.postimg.cc/523pcPrD/new.png"
+          avatar={userDetails.user?.profilePicture}
+
           title="Me"
         />
         <div className="border-l-2 border-gray-400 h-9 hidden sm:block"></div>

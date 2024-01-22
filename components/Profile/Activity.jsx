@@ -12,7 +12,17 @@ import Image from "next/image";
 import love from "../../public/love-circle.svg";
 import like from "../../public/like-circle.svg";
 import support from "../../public/support-circle.svg";
+import useFetchUser from "../useHooks/useFetchUser";
 const Activity = () => {
+
+  const userDetails = useFetchUser();
+
+  const [posts, setPosts] = useState('')
+
+  const addPost = (newPost) => {
+    setPosts([...posts, newPost])
+  }
+
   const { showModal, setModal } = useContext(ModalContext);
   const [activeSection, setActiveSection] = useState("posts");
   const PostPrev = () => {
@@ -20,7 +30,7 @@ const Activity = () => {
       <div className="flex flex-col gap-1">
         <div>
           <p className="text-xs text-gray-500">
-            Hossam Elsheikh posted this - 2w
+            {userDetails.user?.name} posted this - 2w
           </p>
         </div>
         <div className="flex gap-2 py-1">
@@ -86,7 +96,7 @@ const Activity = () => {
               href="#"
               className="font-semibold text-xs text text-blue-600 hover:underline"
             >
-              123 followers
+              {userDetails.user?.followers?.length} followers
             </Link>
           </div>
           <div className="flex gap-2 items-center">
@@ -99,7 +109,7 @@ const Activity = () => {
             <EditIcon className="text-gray-600 rounded-full p-1 text-3xl hover:bg-gray-200 cursor-pointer" />
             {showModal && (
               <Portal>
-                <AddPost />
+                <AddPost onAddPost={addPost}/>
               </Portal>
             )}
           </div>

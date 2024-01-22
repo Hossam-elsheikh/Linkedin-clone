@@ -2,11 +2,11 @@ import React from 'react'
 import { Avatar } from "@mui/material";
 import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt';
 import PhotoCameraBackIcon from '@mui/icons-material/PhotoCameraBack';
-const AddComment = ({type}) => {
+const AddComment = ({publisherId,type}) => {
   return (
     <div className="p-2 flex gap-2 w-full relative px-3">
         <Avatar
-          src='https://i.postimg.cc/523pcPrD/new.png'
+          src={publisherId?.profileCover}
           sx={{
             width: "40px",
             height: "40px",

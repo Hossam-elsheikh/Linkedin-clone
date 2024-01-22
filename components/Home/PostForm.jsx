@@ -6,14 +6,18 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import ArticleIcon from '@mui/icons-material/Article';
 import  { ModalContext } from '@/context/ModalContext';
 import { useContext } from 'react';
+import useFetchUser from '../useHooks/useFetchUser';
+
 function PostForm() {
+  
   const {showModal, setModal}=useContext(ModalContext)
+  const userDetails = useFetchUser()
 
   return (
     <Container className='p-4'>
         <div className='p-2 flex gap-3 items-center'>
 
-        <Avatar src="https://i.postimg.cc/523pcPrD/new.png"
+        <Avatar src={userDetails.user?.profilePicture}
           sx={{
               width: "50px",
               height: "50px",

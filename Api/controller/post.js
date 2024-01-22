@@ -19,7 +19,8 @@ const addPost = async (req, res) => {
 
 const getAllPosts = async (req, res) => {
     try {
-        const allPosts = await postModel.find().populate('publisherId')
+        // const allPosts = await postModel.find()
+        const allPosts = await postModel.find().sort({ created: -1 }).populate('publisherId')
         res.status(200).json({ message: "Successfully retrieved all posts", data: allPosts });
     } catch (err) {
         console.error(err);
@@ -37,28 +38,28 @@ const getPost = async (req, res) => {
     }
 }
 
-const editPost = async(req, res)=>{
+const editPost = async (req, res) => {
     const postId = req.params.id
-    const {postContent} = req.body
-    try{
+    const { postContent } = req.body
+    try {
         const patchingPost = await postModel.findByIdAndUpdate(
             postId,
-            {postContent},
-            {new: true}
-            )
-            res.status(200).json({message:'post patched successfully', patchingPost})
-    }catch(err){
-        res.status(500).json({message:err.message})
+            { postContent },
+            { new: true }
+        )
+        res.status(200).json({ message: 'post patched successfully', patchingPost })
+    } catch (err) {
+        res.status(500).json({ message: err.message })
     }
 }
 
-const deletePost = async(req,res)=>{
+const deletePost = async (req, res) => {
     const postId = req.params.id
-    try{
+    try {
         const deletePost = await postModel.findByIdAndDelete(postId)
-        res.status(200).json({message:'post deleted successfully', deletePost})
-    }catch(err){
-        res.status(500).json({message:err.message})
+        res.status(200).json({ message: 'post deleted successfully', deletePost })
+    } catch (err) {
+        res.status(500).json({ message: err.message })
     }
 }
 
