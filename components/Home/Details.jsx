@@ -6,20 +6,25 @@ import Link from "next/link";
 import PodcastsIcon from "@mui/icons-material/Podcasts";
 import Diversity3Icon from "@mui/icons-material/Diversity3";
 import AddIcon from "@mui/icons-material/Add";
+import useFetchUser from "../useHooks/useFetchUser";
+
 function Details() {
+
+  const userDetails = useFetchUser()
+
   return (
     <>
       <Container className="p-0">
         <div className="h-20">
           <img
             className="object-cover h-16 rounded-t-md w-full"
-            src="https://images.pexels.com/photos/2096622/pexels-photo-2096622.jpeg"
+            src={userDetails.user?.profileCover}
             alt="cover image"
           />
         </div>
         <Avatar
-        src='https://i.postimg.cc/523pcPrD/new.png'
-          sx={{
+            src={userDetails.user?.profilePicture}
+            sx={{
             width: "70px",
             height: "70px",
             marginX: "auto",
@@ -29,9 +34,12 @@ function Details() {
         />
         <div className="text-center my-3">
           <Link href="/profile" className="font-semibold text-sm mb-1 hover:text-blue-600 hover:underline">
-            Hossam Mohamed
+          {userDetails.user?.name}
+            
           </Link>
-          <p className="text-xs font-light">Frontend Developer</p>
+          <p className="text-xs font-light">
+          {userDetails.user?.jobTitle}
+          </p>
         </div>
         <hr />
         <div className="py-2">

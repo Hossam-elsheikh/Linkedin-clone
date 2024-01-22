@@ -3,6 +3,7 @@ const router = express.Router()
 const {auth} = require('../middleWare/auth')
 const {addPost, getAllPosts, getPost, editPost, deletePost} = require('../controller/post')
 
+// router.post('/addPost', addPost)
 router.post('/addPost', auth, addPost)
 router.get('/', getAllPosts)
 router.get('/getPost/:id', getPost)

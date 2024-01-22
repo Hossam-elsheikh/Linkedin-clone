@@ -4,6 +4,11 @@ const reactionSchema = require('./Reaction')
 
 const postSchema = mongoose.Schema({
 
+    created:{
+        type:Date,
+        default:Date.now
+    }
+    ,
     publisherId: {
         type: Schema.Types.ObjectId,
         ref: "User"
@@ -12,15 +17,15 @@ const postSchema = mongoose.Schema({
         text: {
             type: String,
             minLength: 1,
-            // required: true,
+            required: true,
         },
         photo: [{
             url: {
                 type: String,
-                required: true
+                // required: true
             },
             description: {
-                type:String
+                type: String
             }
         }]
     },
@@ -52,7 +57,7 @@ const postSchema = mongoose.Schema({
             type: Date,
             default: Date.now
         }
-    }]
+    }],
 
 })
 
