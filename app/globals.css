@@ -27,3 +27,53 @@ body {
  background: var(--bg);
  color: var(--text-clr);
 }
+
+
+/* interactions animation */
+.custom_animation {
+box-shadow: 0px 0px 5px 0px rgb(88, 88, 88);
+}
+
+
+
+.custom_animation img:nth-child(1){
+animation: popup .6s ease-out forwards;
+}
+.custom_animation img:nth-child(2){
+  animation: popup .6s ease-out .1s forwards;
+}
+.custom_animation img:nth-child(3){
+  animation: popup .6s ease-out .14s forwards;
+}
+.custom_animation img:nth-child(4){
+  animation: popup .6s ease-out .17s forwards;
+}
+.custom_animation img:nth-child(5){
+  animation: popup .6s ease-out forwards;
+}
+.custom_animation img:nth-child(6){
+  animation: popup .6s ease-out forwards;
+}
+.custom_animation img {
+  cursor: pointer;
+transform: scale(1);
+}
+.custom_animation img:hover {
+  transform: scale(1.5);
+  transition: all .3s ease-in-out;
+  }
+@keyframes popup {
+  0%{
+    margin-top: 0;
+    
+  }
+  25%{
+    margin-top: -1rem;
+  }
+  50%{
+    margin-top: 0;
+  }
+100%{
+    margin-top: 0;
+}
+}
