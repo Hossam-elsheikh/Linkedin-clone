@@ -25,46 +25,74 @@ import AddComment from "./AddComment";
 import UserCircle from "@/app/ui/UserCircle";
 import axios from "axios";
 import useGetPosts from "../useHooks/useGetPosts";
+import useDeletePost from "../useHooks/useDeletePost";
+import useLike from "../useHooks/useLike";
 
 const Post = () => {
   const posts = useGetPosts();
+
   const [interactions, setInteractions] = useState('hidden')
   const reactions = [
-    {src:like,alt:'like'},
-    {src:clap,alt:'clap'},
-    {src:support,alt:'support'},
-    {src:love,alt:'love'},
-    {src:insightful,alt:'insightful'},
-    {src:inquire,alt:'inquire'},
+    { src: like, alt: 'like' },
+    { src: clap, alt: 'clap' },
+    { src: support, alt: 'support' },
+    { src: love, alt: 'love' },
+    { src: insightful, alt: 'insightful' },
+    { src: inquire, alt: 'inquire' },
   ]
-  const ReactionDiv =(reaction)=>{
-    return(
+  const ReactionDiv = (reaction, postId) => {
+    return (
       <Image
-                  width='45'
-                  src={reaction.src}
-                  alt={reaction.alt}
-                  key={reaction.alt}
-                  className="py-2 px-2"
-                />
+        width='45'
+        src={reaction.src}
+        alt={reaction.alt}
+        key={reaction.alt}
+        className="py-2 px-2"
+        onClick={() => handleLikePost(postId, reaction.alt)}
+      />
     )
   }
   function showInteractions() {
-    setTimeout(()=>{
+    setTimeout(() => {
 
       setInteractions('block')
-    },300)
+    }, 300)
   }
   function hideInteractions() {
-    setTimeout(()=>{
-    setInteractions('hidden')
-  },300)
+    setTimeout(() => {
+      setInteractions('hidden')
+    }, 300)
 
   }
+
+  // const [reaction, setReaction] = useState()
+
+  // const addLike = async(postId)
+  const { handleLikePost } = useLike()
+
+  const [deletePost, setDeletePost] = useState([])
+
+  const handleDeletePost = async (postId) => {
+    try {
+      const response = await axios.delete(`http://localhost:4010/post/deletePost/${postId}`)
+      if (response.status === 200) {
+        setDeletePost((deleteOnTheWay) => [...deleteOnTheWay, postId])
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  const filteredPosts = posts.filter((post) => !deletePost.includes(post._id))
 
   return (
     <>
-      {posts.map((post) => (
-        <Container className="px-0 py-2 " key={post._id}>
+      {filteredPosts.map((post) => (
+        <Container
+          className="px-0 py-2 "
+          key={post._id}
+        >
+
           <div className="flex justify-between px-3 py-2">
             <UserCircle
               name={post.publisherId.name}
@@ -75,7 +103,9 @@ const Post = () => {
 
             <div className="flex gap-2">
               <MoreHorizIcon className="hover:bg-gray-200 rounded-full text-gray-500 cursor-pointer" />
-              <ClearIcon className="hover:bg-gray-200 rounded-full text-gray-500 cursor-pointer" />
+              <ClearIcon className="hover:bg-gray-200 rounded-full text-gray-500 cursor-pointer"
+                onClick={() => handleDeletePost(post._id)}
+              />
             </div>
           </div>
           {/* Post Content */}
@@ -86,12 +116,13 @@ const Post = () => {
               {/* ياريت كله يشاركنا صورته في الجيم يشبب عاوزين نبوظ لينكد ان */}
             </p>
             <div>
-              {post.postContent.photo.length > 0 ? (
-                <img
-                  className="p-0"
-                  // src={post.postContent.photo}
-                />
-              ) : null}
+              {/* {post.postContent.photo.length > 0 ? ( */}
+              <img
+                className="p-0"
+              // src={post.postContent.photo}
+              />
+
+              {/* ):null} */}
             </div>
           </div>
           {/* Post Interactions */}
@@ -140,16 +171,20 @@ const Post = () => {
           <div className="flex p-1 pt-2 text-sm justify-between px-3 relative">
             <div
               className={`absolute bg-white rounded-lg custom_animation bottom-11 left-1  ${interactions} flex items-center justify-center `}
-              onMouseEnter={()=> {showInteractions()}}
-              onMouseLeave={()=> {hideInteractions()}}
+              onMouseEnter={() => showInteractions()}
+              onMouseLeave={() => hideInteractions()}
+            // onMouseEnter={()=> {showInteractions()}}
+            // onMouseLeave={()=> {hideInteractions()}}
             >
-              {reactions.map((reaction)=>ReactionDiv(reaction))}
+              {reactions.map((reaction) => ReactionDiv(reaction, post._id))}
             </div>
             <div
               className="flex items-center text-gray-500 p-2 rounded cursor-pointer gap-1 hover:bg-gray-200"
               onMouseOver={() => showInteractions()}
-              onMouseOut={()=> hideInteractions()}
+              onMouseOut={() => hideInteractions()}
+              onClick={() => handleLikePost(post._id, 'like')}
             >
+
               <ThumbUpOffAltIcon
                 className="text-xxl"
                 style={{ transform: "scaleX(-1)" }}
