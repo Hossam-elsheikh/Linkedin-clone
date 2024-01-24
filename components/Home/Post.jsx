@@ -29,6 +29,25 @@ import useGetPosts from "../useHooks/useGetPosts";
 const Post = () => {
   const posts = useGetPosts();
   const [interactions, setInteractions] = useState('hidden')
+  const reactions = [
+    {src:like,alt:'like'},
+    {src:clap,alt:'clap'},
+    {src:support,alt:'support'},
+    {src:love,alt:'love'},
+    {src:insightful,alt:'insightful'},
+    {src:inquire,alt:'inquire'},
+  ]
+  const ReactionDiv =(reaction)=>{
+    return(
+      <Image
+                  width='45'
+                  src={reaction.src}
+                  alt={reaction.alt}
+                  key={reaction.alt}
+                  className="py-2 px-2"
+                />
+    )
+  }
   function showInteractions() {
     setTimeout(()=>{
 
@@ -41,6 +60,7 @@ const Post = () => {
   },300)
 
   }
+
   return (
     <>
       {posts.map((post) => (
@@ -119,46 +139,11 @@ const Post = () => {
           {/* Post Actions */}
           <div className="flex p-1 pt-2 text-sm justify-between px-3 relative">
             <div
-              className={`absolute bg-white rounded-lg custom_animation bottom-12 left-1 px-3 py-2  ${interactions} flex items-center justify-center gap-2`}
+              className={`absolute bg-white rounded-lg custom_animation bottom-11 left-1  ${interactions} flex items-center justify-center `}
               onMouseEnter={()=> {showInteractions()}}
               onMouseLeave={()=> {hideInteractions()}}
             >
-              <Image
-                  width='28'
-                  src={like}
-                  alt="like"
-                  
-                />
-              <Image
-                  width='28'
-                  src={clap}
-                  alt="clap"
-                  
-                />
-              <Image
-                  width='28'
-                  src={support}
-                  alt="support"
-                  
-                />
-              <Image
-                  width='28'
-                  src={love}
-                  alt="love"
-                  
-                />
-              <Image
-                  width='28'
-                  src={inquire}
-                  alt="inquire"
-                  
-                />
-              <Image
-                  width='28'
-                  src={insightful}
-                  alt="insightful"
-                  
-                />
+              {reactions.map((reaction)=>ReactionDiv(reaction))}
             </div>
             <div
               className="flex items-center text-gray-500 p-2 rounded cursor-pointer gap-1 hover:bg-gray-200"
