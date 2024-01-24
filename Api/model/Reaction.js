@@ -9,10 +9,11 @@ const reactionSchema = mongoose.Schema({
     },
     reaction: {
         type: String,
-        enum: ['like', 'funny', 'love', 'celebrate', 'insightful', 'support'],
-        // required: true
+        enum: ['like', 'clap', 'support', 'love', 'insightful', 'inquire'],
     }
 
+},{
+    timestamps:true
 })
 
 module.exports = reactionSchema

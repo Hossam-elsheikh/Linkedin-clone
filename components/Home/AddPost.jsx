@@ -15,6 +15,7 @@ import { Tooltip } from 'react-tooltip'
 import Cookies from "js-cookie";
 import useFetchUser from "../useHooks/useFetchUser";
 import axios from "axios";
+import useGetPosts from "../useHooks/useGetPosts";
 // import { useRouter } from "next/navigation";
 
 const AddPost = ({ onAddPost }) => {
@@ -66,13 +67,13 @@ const AddPost = ({ onAddPost }) => {
     try {
       const token = Cookies.get('token');
       const response = await axios.post('http://localhost:4010/post/addpost', postData, { headers: { Authorization: token, } });
-
+      
       if (response.status >= 200 && response.status < 300) {
         setModal(false);
         onAddPost(postData);
         // setPostContent('');
-        console.log('Modal should be closed now');
       }
+      // useGetPosts()
     }
     catch (error) {
       console.error(error);

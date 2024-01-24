@@ -65,7 +65,8 @@ const deletePost = async (req, res) => {
 
 const addLike = async (req, res) => {
 
-    const {postId, reactionType} = req.body
+    const { postId, reactionType } = req.body
+    // console.log(req.body);  
     const userId = req.id
 
     try {
@@ -73,35 +74,65 @@ const addLike = async (req, res) => {
             return res.status(401).json({ message: 'unauthorized: user must login first' })
         }
 
-        const post = await postModel.findOne({_id: postId})
+        const post = await postModel.findOne({ _id: postId })
 
         if (!post) {
             return res.status(404).json({ message: 'post not found' })
         }
+        console.log('Received reactionType:', reactionType);
 
-        if(!['like', 'funny', 'love', 'celebrate', 'insightful', 'support'].includes(reactionType)){
-            return res.status(400).json({message:'invalid reaction type'})
+        if (!['like', 'clap', 'support', 'love', 'insightful', 'inquire'].includes(reactionType)) {
+            // if(!['like', 'funny', 'love', 'celebrate', 'insightful', 'support'].includes(reactionType)){
+            return res.status(400).json({ message: 'invalid reaction type' })
         }
 
-        const isLiked = post.reactions.some(reaction => reaction.userId.equals(userId) && reaction.reaction === reactionType)
-        // const isLiked = post.reactions.some(reaction => reaction.userId && reaction.userId.equals(userId));
+        // const isLiked = post.reactions.some(reaction => reaction.userId.equals(userId) && reaction.reaction === reactionType)
+        // // const isLiked = post.reactions.some(reaction => reaction.userId && reaction.userId.equals(userId));
 
 
-        if (isLiked) {
-            post.reactions = post.reactions.filter(reaction => !reaction.userId.equals(userId) && reaction.reaction === reactionType)
-        }
-        else {
+        // if (isLiked) {
+        //     post.reactions = post.reactions.filter(reaction => !reaction.userId.equals(userId))
+        //     // post.reactions = post.reactions.filter(reaction => !reaction.userId.equals(userId) && reaction.reaction === reactionType)
+        // }
+        // else {
+        //     post.reactions.push({ userId, reaction: reactionType })
+        // }
+        // const existingReactionIndex = post.reactions.findIndex(reaction => reaction.userId.equals(userId));
+
+        // if (existingReactionIndex !== -1) {
+        //     if (post.reactions[existingReactionIndex].reaction === reactionType) {
+        //         // User is trying to remove their existing reaction
+        //         post.reactions.splice(existingReactionIndex, 1);
+        //     } else {
+        //         // Update the existing reaction
+        //         post.reactions[existingReactionIndex].reaction = reactionType;
+        //     }
+        // } else {
+        //     // Add a new reaction
+        //     post.reactions.push({ userId, reaction: reactionType });
+        // }
+        const existingReaction = post.reactions.findIndex(reaction => reaction.userId.equals(userId))
+
+        if (existingReaction !== -1) {
+            if (post.reactions[existingReaction].reaction === reactionType) {
+                post.reactions.splice(existingReaction, 1)
+            } else {
+                post.reactions[existingReaction].reaction = reactionType
+            }
+        } else {
             post.reactions.push({ userId, reaction: reactionType })
         }
+
         const updatePost = await post.save()
 
-        const response = {
-            post: updatePost,
-            likeCount: updatePost.reactions.length
-        }
-        res.json(response)
+        // const response = {
+        //     post: updatePost,
+        //     likeCount: updatePost.reactions.length
+        // }
+        // res.json(response)
     } catch (err) {
         console.error(err);
+        res.status(500).json({ message: 'Internal Server Error check api controller' });
     }
 }
 
