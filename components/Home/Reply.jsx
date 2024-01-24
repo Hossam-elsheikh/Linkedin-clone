@@ -1,13 +1,51 @@
-import React from 'react'
+import React, { useState } from 'react'
 import ClearIcon from "@mui/icons-material/Clear";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import love from "../../public/love-circle.svg";
-import like from "../../public/like-circle.svg";
-import support from "../../public/support-circle.svg"; 
+import like from "../../public/like.svg";
+import love from "../../public/love.svg";
+import support from "../../public/support.svg";
+import insightful from "../../public/insightful.svg";
+import inquire from "../../public/inquire.svg";
+import clap from "../../public/clap.svg";
+import loveCircle from "../../public/love-circle.svg";
+import likeCircle from "../../public/like-circle.svg";
+import supportCircle from "../../public/support-circle.svg"; 
 import Image from "next/image";
 import Link from "next/link";
 import { Avatar } from "@mui/material";
 const Reply = () => {
+  const [interactions, setInteractions] = useState('hidden')
+  const reactions = [
+    {src:like,alt:'like'},
+    {src:clap,alt:'clap'},
+    {src:support,alt:'support'},
+    {src:love,alt:'love'},
+    {src:insightful,alt:'insightful'},
+    {src:inquire,alt:'inquire'},
+  ]
+  const ReactionDiv =(reaction)=>{
+    return(
+      <Image
+                  width='35'
+                  src={reaction.src}
+                  alt={reaction.alt}
+                  key={reaction.alt}
+                  className="py-2 px-2"
+                />
+    )
+  }
+  function showInteractions() {
+    setTimeout(()=>{
+
+      setInteractions('block')
+    },300)
+  }
+  function hideInteractions() {
+    setTimeout(()=>{
+    setInteractions('hidden')
+  },300)
+
+  }
   return (
     <div className="flex gap-1 w-full p-2">
       <Avatar
@@ -41,29 +79,37 @@ const Reply = () => {
           </div>
         </div>
         {/* Comment Actions */}
-        <div className="flex gap-1 text-xs text-gray-500 p-1 items-center">
-          <p className="hover:bg-gray-200 cursor-pointer rounded px-1">Like</p>
+        <div className="flex gap-1 text-xs text-gray-500 p-1 items-center relative">
+        <div
+              className={`absolute bg-white rounded-lg custom_animation bottom-5 left-1  ${interactions} flex items-center justify-center `}
+              onMouseEnter={()=> {showInteractions()}}
+              onMouseLeave={()=> {hideInteractions()}}
+            >
+              {reactions.map((reaction)=>ReactionDiv(reaction))}
+            </div>
+          <p className="hover:bg-gray-200 cursor-pointer rounded px-1" onMouseOver={() => showInteractions()}
+              onMouseOut={()=> hideInteractions()}>Like</p>
           <p>-</p>
           <div className="flex items-center ">
             <div className="flex pl-1">
               <Image
                 width="17"
                 height="17"
-                src={like}
+                src={likeCircle}
                 alt="love"
                 className="border-2 border-white -ml-1 rounded-full"
               />
               <Image
                 width="17"
                 height="17"
-                src={love}
+                src={loveCircle}
                 alt="love"
                 className="border-2 border-white -ml-1 rounded-full"
               />
               <Image
                 width="17"
                 height="17"
-                src={support}
+                src={supportCircle}
                 alt="love"
                 className="border-2 border-white -ml-1 rounded-full"
               />

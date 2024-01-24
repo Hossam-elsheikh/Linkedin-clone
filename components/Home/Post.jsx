@@ -1,14 +1,20 @@
 import Container from "@/app/ui/Container";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import PublicIcon from "@mui/icons-material/Public";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import ClearIcon from "@mui/icons-material/Clear";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import love from "../../public/love-circle.svg";
-import like from "../../public/like-circle.svg";
-import support from "../../public/support-circle.svg";
+import loveCircle from "../../public/love-circle.svg";
+import likeCircle from "../../public/like-circle.svg";
+import supportCircle from "../../public/support-circle.svg";
+import like from "../../public/like.svg";
+import love from "../../public/love.svg";
+import support from "../../public/support.svg";
+import insightful from "../../public/insightful.svg";
+import inquire from "../../public/inquire.svg";
+import clap from "../../public/clap.svg";
 import ShareIcon from "@mui/icons-material/Share";
 import ReplyIcon from "@mui/icons-material/Reply";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
@@ -21,6 +27,39 @@ import axios from "axios";
 import useGetPosts from "../useHooks/useGetPosts";
 
 const Post = () => {
+  const posts = useGetPosts();
+  const [interactions, setInteractions] = useState('hidden')
+  const reactions = [
+    {src:like,alt:'like'},
+    {src:clap,alt:'clap'},
+    {src:support,alt:'support'},
+    {src:love,alt:'love'},
+    {src:insightful,alt:'insightful'},
+    {src:inquire,alt:'inquire'},
+  ]
+  const ReactionDiv =(reaction)=>{
+    return(
+      <Image
+                  width='45'
+                  src={reaction.src}
+                  alt={reaction.alt}
+                  key={reaction.alt}
+                  className="py-2 px-2"
+                />
+    )
+  }
+  function showInteractions() {
+    setTimeout(()=>{
+
+      setInteractions('block')
+    },300)
+  }
+  function hideInteractions() {
+    setTimeout(()=>{
+    setInteractions('hidden')
+  },300)
+
+  }
 
   const posts = useGetPosts()
   // console.log(posts);
@@ -73,11 +112,11 @@ const Post = () => {
             <div>
               {/* {post.postContent.photo.length > 0 ? ( */}
                 <img
-                className="p-0"
-                // src={post.postContent.photo}
+                  className="p-0"
+                  // src={post.postContent.photo}
                 />
                 
-              {/* ):null} */}
+              ):null}
             </div>
           </div>
           {/* Post Interactions */}
@@ -87,21 +126,21 @@ const Post = () => {
                 <Image
                   width="17"
                   height="17"
-                  src={like}
+                  src={likeCircle}
                   alt="love"
                   className="border-2 border-white -ml-1 rounded-full"
                 />
                 <Image
                   width="17"
                   height="17"
-                  src={love}
+                  src={loveCircle}
                   alt="love"
                   className="border-2 border-white -ml-1 rounded-full"
                 />
                 <Image
                   width="17"
                   height="17"
-                  src={support}
+                  src={supportCircle}
                   alt="love"
                   className="border-2 border-white -ml-1 rounded-full"
                 />
@@ -115,7 +154,7 @@ const Post = () => {
               <p className="text-xs text-gray-600 font-light">
                 {/* 23 comments - 14 reposts */}
                 {post.comment?.length}
-                comments, 
+                comments,
                 {post.repost?.length}
                 reposts
               </p>
@@ -123,8 +162,19 @@ const Post = () => {
           </div>
           <hr />
           {/* Post Actions */}
-          <div className="flex p-1 pt-2 text-sm justify-between px-3">
-            <div className="flex items-center text-gray-500 p-2 rounded cursor-pointer gap-1 hover:bg-gray-200">
+          <div className="flex p-1 pt-2 text-sm justify-between px-3 relative">
+            <div
+              className={`absolute bg-white rounded-lg custom_animation bottom-11 left-1  ${interactions} flex items-center justify-center `}
+              onMouseEnter={()=> {showInteractions()}}
+              onMouseLeave={()=> {hideInteractions()}}
+            >
+              {reactions.map((reaction)=>ReactionDiv(reaction))}
+            </div>
+            <div
+              className="flex items-center text-gray-500 p-2 rounded cursor-pointer gap-1 hover:bg-gray-200"
+              onMouseOver={() => showInteractions()}
+              onMouseOut={()=> hideInteractions()}
+            >
               <ThumbUpOffAltIcon
                 className="text-xxl"
                 style={{ transform: "scaleX(-1)" }}
@@ -143,12 +193,15 @@ const Post = () => {
               <p>Repost</p>
             </div>
             <div className="flex items-center text-gray-500 p-2 rounded cursor-pointer gap-1 hover:bg-gray-200">
-              <ReplyIcon className="text-xxl" style={{ transform: "scaleX(-1)" }} />
+              <ReplyIcon
+                className="text-xxl"
+                style={{ transform: "scaleX(-1)" }}
+              />
               <p>Send</p>
             </div>
           </div>
           {/* Add Comment */}
-          <AddComment publisherId = {posts.publisherId} type="Add a Comment..." />
+          <AddComment publisherId={posts.publisherId} type="Add a Comment..." />
           {/* Comments Filter */}
           <div className="flex gap-.5 px-3 font-semibold text-gray-500 text-xs cursor-pointer items-center p-2">
             <p>Most Relevant</p>

@@ -2,9 +2,9 @@
 import React, { useEffect, useState } from "react";
 import Container from "../ui/Container";
 import UserDetails from "@/components/Profile/UserDetails";
-import People from "@/components/Profile/People";
 import useFetchUser from "../../components/useHooks/useFetchUser";
 import Cookies from "js-cookie";
+import People from "@/components/Profile/People";
 
 const Page = () => {
 
