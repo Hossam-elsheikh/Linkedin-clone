@@ -11,13 +11,12 @@ function useGetPosts() {
                 const response = await axios.get('http://localhost:4010/post')
                 const data = response.data.data
                 setPosts(data)
-                // console.log(data);
             } catch (err) {
                 console.error(err);
             }
         }
         getAllPosts()
-    }, [posts])
+    }, [])
 
     return posts
 

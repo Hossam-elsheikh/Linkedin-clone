@@ -23,11 +23,26 @@ import useGetPosts from "../useHooks/useGetPosts";
 const Post = () => {
 
   const posts = useGetPosts()
+  // console.log(posts);
 
+  const [deletePost, setDeletePost] = useState([])
+
+  const handleDeletePost = async(postId) =>{
+    try{
+      const response = await axios.delete(`http://localhost:4010/post/deletePost/${postId}`)
+      if(response.status === 200){
+        setDeletePost((deleteOnTheWay)=> [...deleteOnTheWay, postId])
+      }
+    }catch(err){
+      console.error(err);
+    }
+  }
+
+  const filteredPosts = posts.filter((post)=> !deletePost.includes(post._id))
 
   return (
     <>
-      {posts.map((post) => (
+      {filteredPosts.map((post) => (
         <Container
           className="px-0 py-2 "
           key={post._id}
@@ -43,7 +58,9 @@ const Post = () => {
 
             <div className="flex gap-2">
               <MoreHorizIcon className="hover:bg-gray-200 rounded-full text-gray-500 cursor-pointer" />
-              <ClearIcon className="hover:bg-gray-200 rounded-full text-gray-500 cursor-pointer" />
+              <ClearIcon className="hover:bg-gray-200 rounded-full text-gray-500 cursor-pointer" 
+              onClick= {()=> handleDeletePost(post._id)}
+              />
             </div>
           </div>
           {/* Post Content */}
@@ -54,13 +71,13 @@ const Post = () => {
               {/* ياريت كله يشاركنا صورته في الجيم يشبب عاوزين نبوظ لينكد ان */}
             </p>
             <div>
-              {post.postContent.photo.length > 0 ? (
+              {/* {post.postContent.photo.length > 0 ? ( */}
                 <img
                 className="p-0"
                 // src={post.postContent.photo}
                 />
                 
-              ):null}
+              {/* ):null} */}
             </div>
           </div>
           {/* Post Interactions */}

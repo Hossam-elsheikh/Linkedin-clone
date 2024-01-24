@@ -3,14 +3,14 @@ const { Schema } = mongoose
 
 const reactionSchema = mongoose.Schema({
 
-    reactedUser: {
+    userId: {
         type: Schema.Types.ObjectId,
         ref: "User"
     },
-    reaction:{
-        type:String,
-        react:['like', 'funny', 'love', 'celebrate', 'insightful', 'support'],
-        required: true
+    reaction: {
+        type: String,
+        enum: ['like', 'funny', 'love', 'celebrate', 'insightful', 'support'],
+        // required: true
     }
 
 })

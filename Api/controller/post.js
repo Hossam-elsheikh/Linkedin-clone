@@ -63,4 +63,46 @@ const deletePost = async (req, res) => {
     }
 }
 
-module.exports = { addPost, getAllPosts, getPost, editPost, deletePost }
+const addLike = async (req, res) => {
+
+    const {postId, reactionType} = req.body
+    const userId = req.id
+
+    try {
+        if (!userId) {
+            return res.status(401).json({ message: 'unauthorized: user must login first' })
+        }
+
+        const post = await postModel.findOne({_id: postId})
+
+        if (!post) {
+            return res.status(404).json({ message: 'post not found' })
+        }
+
+        if(!['like', 'funny', 'love', 'celebrate', 'insightful', 'support'].includes(reactionType)){
+            return res.status(400).json({message:'invalid reaction type'})
+        }
+
+        const isLiked = post.reactions.some(reaction => reaction.userId.equals(userId) && reaction.reaction === reactionType)
+        // const isLiked = post.reactions.some(reaction => reaction.userId && reaction.userId.equals(userId));
+
+
+        if (isLiked) {
+            post.reactions = post.reactions.filter(reaction => !reaction.userId.equals(userId) && reaction.reaction === reactionType)
+        }
+        else {
+            post.reactions.push({ userId, reaction: reactionType })
+        }
+        const updatePost = await post.save()
+
+        const response = {
+            post: updatePost,
+            likeCount: updatePost.reactions.length
+        }
+        res.json(response)
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+module.exports = { addPost, getAllPosts, getPost, editPost, deletePost, addLike }

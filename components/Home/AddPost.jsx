@@ -15,17 +15,17 @@ import { Tooltip } from 'react-tooltip'
 import Cookies from "js-cookie";
 import useFetchUser from "../useHooks/useFetchUser";
 import axios from "axios";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 
 const AddPost = ({ onAddPost }) => {
 
-  const router = useRouter()
+  // const router = useRouter()
 
   const userDetails = useFetchUser()
 
   const { setModal } = useContext(ModalContext);
 
-  const signedUser = useFetchUser()
+  // const signedUser = useFetchUser()
 
   const [postContent, setPostContent] = useState('')
 
@@ -46,32 +46,39 @@ const AddPost = ({ onAddPost }) => {
         }]
       }
     }
+    // try {
+    //   const token = Cookies.get('token')
+    //   const response = await axios.post('http://localhost:4010/post/addpost',postData,{headers: {Authorization: token,}})
+    //   if (response.status ===200) {
+    //     setModal(false)
+    //   onAddPost(postData)
+    //   // console.log(onAddPost);
+    //   // onAddPost((prevPosts) => [...prevPosts, postData]);
+    //   // console.log(onAddPost);
+    //   setPostContent('')
+    //   console.log('Modal should be closed now');
+
+    //   }
+    //   else {
+    //   console.log('Post submission failed:', response.status, response.statusText);
+    //   }
+    // }
     try {
-      const token = Cookies.get('token')
-      const response = await axios.post(
-        'http://localhost:4010/post/addpost',
-        postData,
-        {
-          headers: {
-            Authorization: token,
-          }
-        }
-        )
-        setModal(false)
-        if (response.ok) {
-          onAddPost(postData)
-          // onAddPost((prevPosts) => [...prevPosts, postData]); 
-          // console.log(onAddPost);
-          setPostContent('')
-          console.log('Modal should be closed now');
-  
-        }
-        else {
-          console.log('Post submission failed:', response.status, response.statusText);
-        }
-      } catch (error) {
+      const token = Cookies.get('token');
+      const response = await axios.post('http://localhost:4010/post/addpost', postData, { headers: { Authorization: token, } });
+
+      if (response.status >= 200 && response.status < 300) {
+        setModal(false);
+        onAddPost(postData);
+        // setPostContent('');
+        console.log('Modal should be closed now');
+      }
+    }
+    catch (error) {
       console.error(error);
     }
+    console.log(postData);
+
   }
 
 
@@ -103,7 +110,7 @@ const AddPost = ({ onAddPost }) => {
       <form
         action=""
         className="flex flex-col p-3"
-        onSubmit={handleFormSubmit }
+        onSubmit={handleFormSubmit}
 
       >
         <textarea
