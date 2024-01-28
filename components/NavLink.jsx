@@ -9,8 +9,8 @@ import clsx from 'clsx';
 function NavLink({ avatar, Icon, title,dropdown,className,href }) {
   const pathname = usePathname()
   return (
-    <Link href={href||'/'} className={clsx(`${className} flex flex-col items-center  hover:text-black cursor-pointer px-4 pt-2 `,{
-      'text-black border-b-2 border-black': pathname === href,
+    <Link href={href||'/'} className={clsx(`${className} flex flex-col items-center  hover:text-blue-500 cursor-pointer px-4 pt-2 `,{
+      'text-blue-500 ': pathname === href,
       'text-gray-600' : pathname !== href
     })}>
       {Icon && <Icon />}
