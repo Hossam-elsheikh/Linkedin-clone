@@ -3,9 +3,9 @@ import React, { useContext, useEffect, useState } from 'react'
 import { ModalContext } from "@/context/ModalContext";
 import { Avatar } from "@mui/material";
 import like from "../../public/like.svg";
-import love from "../../public/love.svg";
+// import love from "../../public/love.svg";
 import support from "../../public/support.svg";
-import insightful from "../../public/insightful.svg";
+import insightful from "../../public/idea.svg";
 import inquire from "../../public/inquire.svg";
 import clap from "../../public/clap.svg";
 import Image from "next/image";
@@ -34,7 +34,7 @@ function Likes() {
         { src: like, alt: 'like' },
         { src: clap, alt: 'clap' },
         { src: support, alt: 'support' },
-        { src: love, alt: 'love' },
+        // { src: love, alt: 'love' },
         { src: insightful, alt: 'insightful' },
         { src: inquire, alt: 'inquire' },
     ]
@@ -58,7 +58,7 @@ function Likes() {
             case 'support':
                 return support;
             case 'love':
-                return love;
+                // return love;
             case 'insightful':
                 return insightful;
             case 'inquire':

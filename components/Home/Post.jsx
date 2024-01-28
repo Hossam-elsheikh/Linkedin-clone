@@ -56,6 +56,8 @@ const Post = () => {
                   alt={reaction.alt}
                   key={reaction.alt}
                   className="py-2 px-2"
+            onClick={() => handleLikePost(postId, reaction.alt)}
+
                 />
     )
   }
