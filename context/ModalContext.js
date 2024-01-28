@@ -5,7 +5,8 @@ export const ModalContext = createContext();
 import React from 'react'
 
 const ModalContextProvider = ({children}) => {
-    const [showModal,setModal] = useState(false)
+    const [showModal,setModal] = useState('')
+    
   return (
     <ModalContext.Provider value={{showModal,setModal}}>
         {children}

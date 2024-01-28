@@ -25,6 +25,7 @@ const AddPost = ({ onAddPost }) => {
   const userDetails = useFetchUser()
 
   const { setModal } = useContext(ModalContext);
+  console.log(setModal);
 
   // const signedUser = useFetchUser()
 

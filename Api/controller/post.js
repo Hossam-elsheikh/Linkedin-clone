@@ -19,7 +19,7 @@ const addPost = async (req, res) => {
 
 const getAllPosts = async (req, res) => {
     try {
-        // const allPosts = await postModel.find()
+        // const allPosts = await postModel.find().populate('publisherId')
         const allPosts = await postModel.find().sort({ created: -1 }).populate('publisherId')
         res.status(200).json({ message: "Successfully retrieved all posts", data: allPosts });
     } catch (err) {
@@ -136,4 +136,22 @@ const addLike = async (req, res) => {
     }
 }
 
-module.exports = { addPost, getAllPosts, getPost, editPost, deletePost, addLike }
+const getLikes = async (req, res) => {
+    const postId  = req.params.id;
+
+    try {
+        const post = await postModel.findById(postId).populate('reactions.userId','name jobTitle profilePicture');
+
+        if (!post) {
+            return res.status(404).json({ message: 'Post not found' });
+        }
+
+        const likes = post.reactions;
+        return res.status(200).json( likes );
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ message: 'Internal Server Error' });
+    }
+};
+
+module.exports = { addPost, getAllPosts, getPost, editPost, deletePost, addLike, getLikes }

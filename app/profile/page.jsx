@@ -5,7 +5,7 @@ import UserDetails from "@/components/Profile/UserDetails";
 import useFetchUser from "../../components/useHooks/useFetchUser";
 import Cookies from "js-cookie";
 import People from "@/components/Profile/People";
-
+    
 const Page = () => {
 
   const userId = Cookies.get('userId')

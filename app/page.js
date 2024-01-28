@@ -11,13 +11,16 @@ import { useContext } from "react";
 import Modal from "@/components/Modal/Modal";
 import Portal from "@/components/Modal/Overlay";
 import AddPost from "@/components/Home/AddPost";
+import Likes from "@/components/Home/likes";
+import { LikesContextProvider, useLikesContext } from "../context/LikesContext";
 
 export default function Home() {
   const { showModal, setModal } = useContext(ModalContext);
+  // const { setPost } = useLikesContext() || {}; 
 
   return (
     <>
-      {showModal && (
+      {showModal == 'ADDPOST' && (
         <Portal>
           <AddPost />
         </Portal>
@@ -27,8 +30,16 @@ export default function Home() {
           <Details />
         </div>
         <div className="col-span-10 sm:col-span-7 lg:col-span-5 ">
+          {/* <LikesContextProvider>
+            <Posts setPost={setPost} />
+          </LikesContextProvider> */}
           <Posts />
-          
+
+          {showModal == 'SHOWLIKES' && (
+            <Portal>
+              <Likes />
+            </Portal>
+          )}
         </div>
         <div className="col-span-10 sm:col-span-3 hidden lg:block">
           <Recommendations />

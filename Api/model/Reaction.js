@@ -10,7 +10,7 @@ const reactionSchema = mongoose.Schema({
     reaction: {
         type: String,
         enum: ['like', 'clap', 'support', 'love', 'insightful', 'inquire'],
-    }
+    },
 
 },{
     timestamps:true

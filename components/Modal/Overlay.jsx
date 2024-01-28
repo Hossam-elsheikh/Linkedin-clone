@@ -22,7 +22,6 @@ const Portal = ({ children, hideModal }) => {
     window.scrollTo({ top: 0 })
     return () => {
       setMounted(false);
-
       document.documentElement.style.overflow = "auto";
     };
   }, []);

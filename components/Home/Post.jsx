@@ -1,5 +1,5 @@
 import Container from "@/app/ui/Container";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import PublicIcon from "@mui/icons-material/Public";
@@ -25,11 +25,20 @@ import AddComment from "./AddComment";
 import UserCircle from "@/app/ui/UserCircle";
 import axios from "axios";
 import useGetPosts from "../useHooks/useGetPosts";
+import useGetLikes from "../useHooks/useGetLikes";
 import useDeletePost from "../useHooks/useDeletePost";
 import useLike from "../useHooks/useLike";
+import Likes from "./likes";
+import Portal from "../Modal/Overlay";
+import { ModalContext } from "@/context/ModalContext";
+import { useLikesContext } from "@/context/LikesContext";
+import { useDispatch } from "react-redux";
+import { selectPost } from "@/redux/slice/postIdSlice";
 
 const Post = () => {
   const posts = useGetPosts();
+
+  const { showModal, setModal } = useContext(ModalContext)
 
   const [interactions, setInteractions] = useState('hidden')
   const reactions = [
@@ -65,11 +74,16 @@ const Post = () => {
 
   }
 
-  // const [reaction, setReaction] = useState()
-
-  // const addLike = async(postId)
+  //like handling
   const { handleLikePost } = useLike()
 
+  const dispatch = useDispatch()
+
+    const handlePushingPostId = (postId) => {
+    dispatch(selectPost(postId));
+  };
+
+  //delete post
   const [deletePost, setDeletePost] = useState([])
 
   const handleDeletePost = async (postId) => {
@@ -113,7 +127,6 @@ const Post = () => {
             <p className="text-sm p-3" dir="rtl">
               {post.postContent.text}
 
-              {/* ياريت كله يشاركنا صورته في الجيم يشبب عاوزين نبوظ لينكد ان */}
             </p>
             <div>
               {/* {post.postContent.photo.length > 0 ? ( */}
@@ -127,8 +140,9 @@ const Post = () => {
           </div>
           {/* Post Interactions */}
           <div className="p-2 px-3 flex justify-between items center">
-            <div className="flex items-center gap-1">
-              <div className="flex">
+            <div className="flex items-center gap-1 cursor-pointer hover:underline hover:text-blue-500">
+              <div className="flex" onClick={() => {setModal("SHOWLIKES"); handlePushingPostId(post._id)}}>
+
                 <Image
                   width="17"
                   height="17"
@@ -150,11 +164,18 @@ const Post = () => {
                   alt="love"
                   className="border-2 border-white -ml-1 rounded-full"
                 />
+                <p className="text-xs text-gray-600 mr-4 font-light hover:text-blue-500"
+
+                >
+                  {/* {showModal=="SHOWLIKES" && (
+                  <Portal>
+                    <Likes />
+                  </Portal>
+                )} */}
+                  {post.reactions?.length}
+                  {/* Essam Konafa and 1.233 others */}
+                </p>
               </div>
-              <p className="text-xs text-gray-600 font-light">
-                {post.reactions?.length}
-                {/* Essam Konafa and 1.233 others */}
-              </p>
             </div>
             <div>
               <p className="text-xs text-gray-600 font-light">
