@@ -12,13 +12,15 @@ import NavLink from "../NavLink";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import Link from "next/link";
 import useFetchUser from "../useHooks/useFetchUser";
+import syncLogo from "../../public/sync-logo.svg"
 function NavBar() {
   const userDetails = useFetchUser()
 
   return (
     <div className="flex bg-white justify-evenly items-center sticky top-0 z-30">
-      <div className="flex items-center gap-2">
-        <LinkedInIcon className="logo" />
+      <div className="flex items-center gap-5">
+        {/* <LinkedInIcon className="logo" /> */}
+        <Image height='30' src={syncLogo} />
         <div className="relative h-9">
           <SearchIcon className="absolute top-1.5 left-1 text-gray-600 lg:text-gray-400" />
           <input

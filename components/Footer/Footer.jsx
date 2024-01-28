@@ -1,5 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
+import syncLogo from '../../public/sync-logo.svg'
 const Footer = () => {
   return (
     <div className='flex gap-3 p-4 items-center justify-center flex-col sticky top-16'>
@@ -14,9 +16,9 @@ const Footer = () => {
             <Link href='#' className='text-xs text-gray-500 hover:text-blue-800 hover:underline'>Get the LinkedIn app</Link>
             <Link href='#' className='text-xs text-gray-500 hover:text-blue-800 hover:underline'>More</Link>
         </div>
-        <div className='flex px-3 item-center gap-1'>
-          <img style={{height:'15px'}} src="https://i.postimg.cc/nLqmXLC3/Linkedin-logo-png.png" alt="Linkdin-logo" />
-        <p className='text-xs text-gray-700'>LinkedIn Corporation © 2023</p>
+        <div className='flex px-3 items-center gap-3'>
+          <Image height='20' src={syncLogo} alt="Linkdin-logo" />
+        <p className='text-xs text-gray-700'>Sync Corporation © 2023</p>
         </div>
     </div>
   )
