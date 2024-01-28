@@ -6,13 +6,12 @@ import PublicIcon from "@mui/icons-material/Public";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import ClearIcon from "@mui/icons-material/Clear";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import loveCircle from "../../public/love-circle.svg";
+import ideaCircle from "../../public/idea-circle.svg";
 import likeCircle from "../../public/like-circle.svg";
 import supportCircle from "../../public/support-circle.svg";
 import like from "../../public/like.svg";
-import love from "../../public/love.svg";
 import support from "../../public/support.svg";
-import insightful from "../../public/insightful.svg";
+import insightful from "../../public/idea.svg";
 import inquire from "../../public/inquire.svg";
 import clap from "../../public/clap.svg";
 import ShareIcon from "@mui/icons-material/Share";
@@ -42,23 +41,22 @@ const Post = () => {
 
   const [interactions, setInteractions] = useState('hidden')
   const reactions = [
-    { src: like, alt: 'like' },
-    { src: clap, alt: 'clap' },
-    { src: support, alt: 'support' },
-    { src: love, alt: 'love' },
-    { src: insightful, alt: 'insightful' },
-    { src: inquire, alt: 'inquire' },
+    {src:like,alt:'like'},
+    {src:clap,alt:'clap'},
+    {src:support,alt:'support'},
+    // {src:love,alt:'love'},
+    {src:insightful,alt:'insightful'},
+    {src:inquire,alt:'inquire'},
   ]
   const ReactionDiv = (reaction, postId) => {
     return (
       <Image
-        width='45'
-        src={reaction.src}
-        alt={reaction.alt}
-        key={reaction.alt}
-        className="py-2 px-2"
-        onClick={() => handleLikePost(postId, reaction.alt)}
-      />
+                  width='60'
+                  src={reaction.src}
+                  alt={reaction.alt}
+                  key={reaction.alt}
+                  className="py-2 px-2"
+                />
     )
   }
   function showInteractions() {
@@ -144,22 +142,22 @@ const Post = () => {
               <div className="flex" onClick={() => {setModal("SHOWLIKES"); handlePushingPostId(post._id)}}>
 
                 <Image
-                  width="17"
-                  height="17"
+                  width="20"
+                  height="20"
                   src={likeCircle}
                   alt="love"
                   className="border-2 border-white -ml-1 rounded-full"
                 />
                 <Image
-                  width="17"
-                  height="17"
-                  src={loveCircle}
+                  width="20"
+                  height="20"
+                  src={ideaCircle}
                   alt="love"
                   className="border-2 border-white -ml-1 rounded-full"
                 />
                 <Image
-                  width="17"
-                  height="17"
+                  width="20"
+                  height="20"
                   src={supportCircle}
                   alt="love"
                   className="border-2 border-white -ml-1 rounded-full"

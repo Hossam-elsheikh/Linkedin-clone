@@ -2,12 +2,11 @@ import React, { useState } from 'react'
 import ClearIcon from "@mui/icons-material/Clear";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import like from "../../public/like.svg";
-import love from "../../public/love.svg";
 import support from "../../public/support.svg";
-import insightful from "../../public/insightful.svg";
+import insightful from "../../public/idea.svg";
 import inquire from "../../public/inquire.svg";
 import clap from "../../public/clap.svg";
-import loveCircle from "../../public/love-circle.svg";
+import ideaCircle from "../../public/idea-circle.svg";
 import likeCircle from "../../public/like-circle.svg";
 import supportCircle from "../../public/support-circle.svg"; 
 import Image from "next/image";
@@ -19,14 +18,13 @@ const Reply = () => {
     {src:like,alt:'like'},
     {src:clap,alt:'clap'},
     {src:support,alt:'support'},
-    {src:love,alt:'love'},
     {src:insightful,alt:'insightful'},
     {src:inquire,alt:'inquire'},
   ]
   const ReactionDiv =(reaction)=>{
     return(
       <Image
-                  width='35'
+                  width='55'
                   src={reaction.src}
                   alt={reaction.alt}
                   key={reaction.alt}
@@ -102,7 +100,7 @@ const Reply = () => {
               <Image
                 width="17"
                 height="17"
-                src={loveCircle}
+                src={ideaCircle}
                 alt="love"
                 className="border-2 border-white -ml-1 rounded-full"
               />
