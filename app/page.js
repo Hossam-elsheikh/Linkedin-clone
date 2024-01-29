@@ -25,6 +25,11 @@ export default function Home() {
           <AddPost />
         </Portal>
       )}
+      {showModal == 'SHOWLIKES' && (
+            <Portal>
+              <Likes />
+            </Portal>
+          )}
       <div className={`grid grid-cols-10 w-full xl:w-3/4  m-auto p-0 gap-6 relative sm:p-5`}>
         <div className="flex flex-col gap-3 col-span-10 sm:col-span-3 lg:col-span-2">
           <Details />
@@ -34,12 +39,6 @@ export default function Home() {
             <Posts setPost={setPost} />
           </LikesContextProvider> */}
           <Posts />
-
-          {showModal == 'SHOWLIKES' && (
-            <Portal>
-              <Likes />
-            </Portal>
-          )}
         </div>
         <div className="col-span-10 sm:col-span-3 hidden lg:block">
           <Recommendations />

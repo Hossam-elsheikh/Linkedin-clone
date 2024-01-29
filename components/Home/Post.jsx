@@ -29,84 +29,88 @@ import useDeletePost from "../useHooks/useDeletePost";
 import useLike from "../useHooks/useLike";
 import Likes from "./likes";
 import Portal from "../Modal/Overlay";
+import Cookies from "js-cookie";
 import { ModalContext } from "@/context/ModalContext";
 import { useLikesContext } from "@/context/LikesContext";
 import { useDispatch } from "react-redux";
 import { selectPost } from "@/redux/slice/postIdSlice";
-
-const Post = () => {
+import { useSelector } from "react-redux";
+const Post = ({post}) => {
   const posts = useGetPosts();
-
-  const { showModal, setModal } = useContext(ModalContext)
-
-  const [interactions, setInteractions] = useState('hidden')
+  const { setModal } = useContext(ModalContext);
+  const [interactions, setInteractions] = useState("hidden");
   const reactions = [
-    {src:like,alt:'like'},
-    {src:clap,alt:'clap'},
-    {src:support,alt:'support'},
+    { src: like, alt: "like",textClr:'text-blue-600' },
+    { src: clap, alt: "clap",textClr:'text-orange-800' },
+    { src: support, alt: "support",textClr:'text-red-800' },
     // {src:love,alt:'love'},
-    {src:insightful,alt:'insightful'},
-    {src:inquire,alt:'inquire'},
-  ]
+    { src: insightful, alt: "insightful",textClr:'text-yellow-600' },
+    { src: inquire, alt: "inquire",textClr:'text-yellow-700' },
+  ];
+
   const ReactionDiv = (reaction, postId) => {
     return (
       <Image
-                  width='60'
-                  src={reaction.src}
-                  alt={reaction.alt}
-                  key={reaction.alt}
-                  className="py-2 px-2"
-            onClick={() => handleLikePost(postId, reaction.alt)}
-
-                />
-    )
-  }
-  function showInteractions() {
-    setTimeout(() => {
-
-      setInteractions('block')
-    }, 300)
-  }
-  function hideInteractions() {
-    setTimeout(() => {
-      setInteractions('hidden')
-    }, 300)
-
-  }
+        width="60"
+        src={reaction.src}
+        alt={reaction.alt}
+        key={reaction.alt}
+        className="py-2 px-2"
+        onClick={() => handleLikePost(postId, reaction.alt)}
+      />
+    );
+  };
 
   //like handling
-  const { handleLikePost } = useLike()
-
-  const dispatch = useDispatch()
-
-    const handlePushingPostId = (postId) => {
+  const { handleLikePost } = useLike();
+  const dispatch = useDispatch();
+  const handlePushingPostId = (postId) => {
     dispatch(selectPost(postId));
   };
 
-  //delete post
-  const [deletePost, setDeletePost] = useState([])
+  // render current user reaction
+  const filterReactions = (post) => {
+    return post.reactions?.find(
+      (reaction) => reaction.userId === Cookies.get("userId")
+    );
+  };
+  const renderReaction = (post) => {
+    let currentReaction = reactions.find(
+      (reaction) => reaction.alt === filterReactions(post).reaction
+    );
+    return (
+      <div className="flex items-center gap-1">
+      <Image
+        width="30"
+        src={currentReaction.src}
+        alt={currentReaction.alt}
+        key={currentReaction.alt}
+        
+        />
+        <p className={currentReaction.textClr}>{currentReaction.alt}</p>
+        </div>
+    );
+  };
 
+  //delete post
+  const [deletePost, setDeletePost] = useState([]);
   const handleDeletePost = async (postId) => {
     try {
-      const response = await axios.delete(`http://localhost:4010/post/deletePost/${postId}`)
+      const response = await axios.delete(
+        `http://localhost:4010/post/deletePost/${postId}`
+      );
       if (response.status === 200) {
-        setDeletePost((deleteOnTheWay) => [...deleteOnTheWay, postId])
+        setDeletePost((deleteOnTheWay) => [...deleteOnTheWay, postId]);
       }
     } catch (err) {
       console.error(err);
     }
-  }
-
-  const filteredPosts = posts.filter((post) => !deletePost.includes(post._id))
+  };
+  const filteredPosts = posts.filter((post) => !deletePost.includes(post._id));
 
   return (
     <>
-      {filteredPosts.map((post) => (
-        <Container
-          className="px-0 py-2 "
-          key={post._id}
-        >
-
+        <Container className="px-0 py-2 " key={post._id}>
           <div className="flex justify-between px-3 py-2">
             <UserCircle
               name={post.publisherId.name}
@@ -117,7 +121,8 @@ const Post = () => {
 
             <div className="flex gap-2">
               <MoreHorizIcon className="hover:bg-gray-200 rounded-full text-gray-500 cursor-pointer" />
-              <ClearIcon className="hover:bg-gray-200 rounded-full text-gray-500 cursor-pointer"
+              <ClearIcon
+                className="hover:bg-gray-200 rounded-full text-gray-500 cursor-pointer"
                 onClick={() => handleDeletePost(post._id)}
               />
             </div>
@@ -126,13 +131,12 @@ const Post = () => {
           <div className="">
             <p className="text-sm p-3" dir="rtl">
               {post.postContent.text}
-
             </p>
             <div>
               {/* {post.postContent.photo.length > 0 ? ( */}
               <img
                 className="p-0"
-              // src={post.postContent.photo}
+                // src={post.postContent.photo}
               />
 
               {/* ):null} */}
@@ -141,8 +145,13 @@ const Post = () => {
           {/* Post Interactions */}
           <div className="p-2 px-3 flex justify-between items center">
             <div className="flex items-center gap-1 cursor-pointer hover:underline hover:text-blue-500">
-              <div className="flex" onClick={() => {setModal("SHOWLIKES"); handlePushingPostId(post._id)}}>
-
+              <div
+                className="flex"
+                onClick={() => {
+                  setModal("SHOWLIKES");
+                  handlePushingPostId(post._id);
+                }}
+              >
                 <Image
                   width="20"
                   height="20"
@@ -164,15 +173,13 @@ const Post = () => {
                   alt="love"
                   className="border-2 border-white -ml-1 rounded-full"
                 />
-                <p className="text-xs text-gray-600 mr-4 font-light hover:text-blue-500"
-
-                >
+                <p className="text-xs text-gray-600 mr-4 font-light hover:text-blue-500">
                   {/* {showModal=="SHOWLIKES" && (
                   <Portal>
                     <Likes />
                   </Portal>
                 )} */}
-                  {post.reactions?.length}
+                  {post.reactions?.length !== 0 ? post.reactions.length : ''}
                   {/* Essam Konafa and 1.233 others */}
                 </p>
               </div>
@@ -192,25 +199,29 @@ const Post = () => {
           <div className="flex p-1 pt-2 text-sm justify-between px-3 relative">
             <div
               className={`absolute bg-white rounded-lg custom_animation bottom-11 left-1  ${interactions} flex items-center justify-center `}
-              onMouseEnter={() => showInteractions()}
-              onMouseLeave={() => hideInteractions()}
-            // onMouseEnter={()=> {showInteractions()}}
-            // onMouseLeave={()=> {hideInteractions()}}
+              onMouseEnter={() => setInteractions("block")}
+              onMouseLeave={() => setInteractions("hidden")}
             >
               {reactions.map((reaction) => ReactionDiv(reaction, post._id))}
             </div>
             <div
               className="flex items-center text-gray-500 p-2 rounded cursor-pointer gap-1 hover:bg-gray-200"
-              onMouseOver={() => showInteractions()}
-              onMouseOut={() => hideInteractions()}
-              onClick={() => handleLikePost(post._id, 'like')}
+              onMouseEnter={() => setInteractions("block")}
+              onMouseLeave={() => setInteractions("hidden")}
+              onClick={() => handleLikePost(post._id, "like")}
             >
-
-              <ThumbUpOffAltIcon
-                className="text-xxl"
-                style={{ transform: "scaleX(-1)" }}
-              />
-              <p>Like</p>
+              {filterReactions(post) ? (
+                renderReaction(post)
+              ) : (
+                <>
+                  {" "}
+                  <ThumbUpOffAltIcon
+                    className="text-xxl"
+                    style={{ transform: "scaleX(-1)" }}
+                  />
+                  <p>Like</p>
+                </>
+              )}
             </div>
             <div className="flex items-center text-gray-500 p-2 rounded cursor-pointer gap-1 hover:bg-gray-200">
               <ChatBubbleOutlineIcon
@@ -244,7 +255,7 @@ const Post = () => {
             Load More Comments
           </p>
         </Container>
-      ))}
+      
     </>
   );
 };

@@ -12,15 +12,16 @@
 
     return (
       <html  lang="en">
-        <body  className={` ${inter.className}`}>
+        <body  className={` ${inter.className} `}>
+        <div id="portal" ></div>
           <Providers>
-        <div id="portal"></div>
           <ModalContextProvider>
-            <div className="" >
+            <main>
+            <div  >
               {pathname === '/signup' || pathname === '/signin'  ? null : <NavBar />}
               {children}
-
             </div>
+            </main>
           </ModalContextProvider>
           </Providers>
         </body>
