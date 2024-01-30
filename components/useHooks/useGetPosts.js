@@ -26,7 +26,7 @@ function useGetPosts() {
         return () => {
             isMounted = false;
         };
-    }, [posts]);
+    }, []);
 
     return posts;
 }

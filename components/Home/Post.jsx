@@ -35,6 +35,7 @@ import { useLikesContext } from "@/context/LikesContext";
 import { useDispatch } from "react-redux";
 import { selectPost } from "@/redux/slice/postIdSlice";
 import { useSelector } from "react-redux";
+import UseGetComment from "../useHooks/useGetComment";
 const Post = ({post}) => {
   const posts = useGetPosts();
   const { setModal } = useContext(ModalContext);
@@ -250,7 +251,7 @@ const Post = ({post}) => {
             <ArrowDropDownIcon />
           </div>
           {/* Comments */}
-          <Comment />
+          <Comment postId={post._id}/>
           <p className="hover:bg-gray-200 cursor-pointer rounded py-1 mx-1 px-2 text-xs text-gray-500 font-semibold w-fit">
             Load More Comments
           </p>

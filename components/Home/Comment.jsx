@@ -13,7 +13,10 @@ import clap from "../../public/clap.svg";
 import { Avatar } from "@mui/material";
 import Reply from "./Reply";
 import Link from "next/link";
-const Comment = () => {
+import useGetComment from '../useHooks/useGetComment'
+
+const Comment = ({postId}) => {
+
   const [interactions, setInteractions] = useState('hidden')
   const reactions = [
     {src:like,alt:'like'},
@@ -43,12 +46,20 @@ const Comment = () => {
     setTimeout(()=>{
     setInteractions('hidden')
   },300)
+}
 
-  }
+//comment handlin'
+
+//get comment
+const comment = useGetComment(postId)
+console.log(comment);
+
   return (
-    <div className="flex gap-1 w-full p-2 p-3">
+    <>
+    {comment.map((commentInfo)=>(
+    <div className="flex gap-1 w-full p-2 p-3" key={commentInfo._id}>
       <Avatar
-        src="https://i.postimg.cc/NFsfnj23/image.jpg"
+        src={commentInfo.commenterId?.profilePicture}
         sx={{
           width: "40px",
           height: "40px",
@@ -60,9 +71,10 @@ const Comment = () => {
           <div className="flex justify-between items-center">
             <div className="flex flex-col">
               <Link href='#' className="font-semibold text-sm text-gray-600 hover:text-blue-600">
-                Essam Konafa
+                {/* Essam Konafa */}
+                {commentInfo.commenterId?.name}
               </Link>
-              <p className="text-xs text-gray-500">MERN stack web developer</p>
+              <p className="text-xs text-gray-500">{commentInfo.commenterId?.jobTitle}</p>
             </div>
             <div className="flex text-gray-600 items-center gap-1 text-xs">
               <p>1d</p>
@@ -72,7 +84,7 @@ const Comment = () => {
           {/* Comment Content */}
           <div>
             <p className="text-sm pt-2" dir="rtl">
-              بس دي صورتي انا يستا :(
+              {commentInfo.text}
             </p>  
           </div>
         </div>
@@ -112,16 +124,18 @@ const Comment = () => {
                 className="border-2 border-white -ml-1 rounded-full"
               />
             </div>
-            <p className=" cursor-pointer rounded px-1">120</p>
+            <p className=" cursor-pointer rounded px-1">{commentInfo.reactions?.length}</p>
           </div>
           <p className=" cursor-pointer rounded ">|</p>
           <p className="hover:bg-gray-200 cursor-pointer rounded px-1">Reply</p>
           <p>-</p>
-          <p className=" cursor-pointer rounded px-1">1 Reply</p>
+          <p className=" cursor-pointer rounded px-1">{commentInfo.replies?.length} Reply</p>
         </div>
-      <Reply/>
+      <Reply postId={postId}/>
       </div>
     </div>
+    ))}
+    </>
   );
 };
 

@@ -12,7 +12,12 @@ import supportCircle from "../../public/support-circle.svg";
 import Image from "next/image";
 import Link from "next/link";
 import { Avatar } from "@mui/material";
-const Reply = () => {
+import useGetReply from '../useHooks/useGetReply'
+
+const Reply = ({postId}) => {
+
+  console.log(postId);
+
   const [interactions, setInteractions] = useState('hidden')
   const reactions = [
     {src:like,alt:'like'},
@@ -42,12 +47,17 @@ const Reply = () => {
     setTimeout(()=>{
     setInteractions('hidden')
   },300)
-
   }
+
+  const reply = useGetReply(postId)
+
   return (
-    <div className="flex gap-1 w-full p-2">
+    <>
+    {reply.map((replyInfo)=>(
+
+    <div className="flex gap-1 w-full p-2" key={replyInfo._id}>
       <Avatar
-        src="https://i.postimg.cc/523pcPrD/new.png"
+        src={replyInfo.replierId?.profilePicture}
         sx={{
           width: "40px",
           height: "40px",
@@ -59,9 +69,9 @@ const Reply = () => {
           <div className="flex justify-between items-center">
             <div className="flex flex-col">
               <Link href='#' className="font-semibold text-sm text-gray-600 hover:text-blue-600">
-                Hossam Mohamed
+                {replyInfo.replierId?.name}
               </Link>
-              <p className="text-xs text-gray-500">MERN stack web developer</p>
+              <p className="text-xs text-gray-500">{replyInfo.replierId?.jobTitle}</p>
             </div>
             <div className="flex text-gray-600 items-center gap-1 text-xs">
               <p>1d</p>
@@ -71,8 +81,7 @@ const Reply = () => {
           {/* Comment Content */}
           <div>
             <p className="text-sm pt-2" dir='rtl'>
-              انا وانت واحد يبولصوحاب :D
-
+              {replyInfo.reply}
             </p>
           </div>
         </div>
@@ -112,7 +121,7 @@ const Reply = () => {
                 className="border-2 border-white -ml-1 rounded-full"
               />
             </div>
-            <p className=" cursor-pointer rounded px-1">120</p>
+            <p className=" cursor-pointer rounded px-1">{replyInfo.reactions?.length}</p>
           </div>
           <p className=" cursor-pointer rounded ">|</p>
           <p className="hover:bg-gray-200 cursor-pointer rounded px-1">Reply</p>
@@ -120,6 +129,8 @@ const Reply = () => {
         </div>
       </div>
     </div>
+    ))}
+    </>
   )
 }
 

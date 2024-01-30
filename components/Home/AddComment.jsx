@@ -6,7 +6,7 @@ const AddComment = ({publisherId,type}) => {
   return (
     <div className="p-2 flex gap-2 w-full relative px-3">
         <Avatar
-          src={publisherId?.profileCover}
+          src={publisherId?.profilePicture}
           sx={{
             width: "40px",
             height: "40px",
