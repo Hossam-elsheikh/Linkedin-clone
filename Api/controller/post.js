@@ -66,7 +66,6 @@ const deletePost = async (req, res) => {
 const addLike = async (req, res) => {
 
     const { postId, reactionType } = req.body
-    // console.log(req.body);  
     const userId = req.id
 
     try {
@@ -82,35 +81,9 @@ const addLike = async (req, res) => {
         console.log('Received reactionType:', reactionType);
 
         if (!['like', 'clap', 'support', 'love', 'insightful', 'inquire'].includes(reactionType)) {
-            // if(!['like', 'funny', 'love', 'celebrate', 'insightful', 'support'].includes(reactionType)){
             return res.status(400).json({ message: 'invalid reaction type' })
         }
 
-        // const isLiked = post.reactions.some(reaction => reaction.userId.equals(userId) && reaction.reaction === reactionType)
-        // // const isLiked = post.reactions.some(reaction => reaction.userId && reaction.userId.equals(userId));
-
-
-        // if (isLiked) {
-        //     post.reactions = post.reactions.filter(reaction => !reaction.userId.equals(userId))
-        //     // post.reactions = post.reactions.filter(reaction => !reaction.userId.equals(userId) && reaction.reaction === reactionType)
-        // }
-        // else {
-        //     post.reactions.push({ userId, reaction: reactionType })
-        // }
-        // const existingReactionIndex = post.reactions.findIndex(reaction => reaction.userId.equals(userId));
-
-        // if (existingReactionIndex !== -1) {
-        //     if (post.reactions[existingReactionIndex].reaction === reactionType) {
-        //         // User is trying to remove their existing reaction
-        //         post.reactions.splice(existingReactionIndex, 1);
-        //     } else {
-        //         // Update the existing reaction
-        //         post.reactions[existingReactionIndex].reaction = reactionType;
-        //     }
-        // } else {
-        //     // Add a new reaction
-        //     post.reactions.push({ userId, reaction: reactionType });
-        // }
         const existingReaction = post.reactions.findIndex(reaction => reaction.userId.equals(userId))
 
         if (existingReaction !== -1) {
@@ -137,21 +110,193 @@ const addLike = async (req, res) => {
 }
 
 const getLikes = async (req, res) => {
-    const postId  = req.params.id;
+    const postId = req.params.id;
 
     try {
-        const post = await postModel.findById(postId).populate('reactions.userId','name jobTitle profilePicture');
+        const post = await postModel.findById(postId).populate('reactions.userId', 'name jobTitle profilePicture');
 
         if (!post) {
             return res.status(404).json({ message: 'Post not found' });
         }
 
         const likes = post.reactions;
-        return res.status(200).json( likes );
+        return res.status(200).json(likes);
     } catch (err) {
         console.error(err);
         return res.status(500).json({ message: 'Internal Server Error' });
     }
 };
 
-module.exports = { addPost, getAllPosts, getPost, editPost, deletePost, addLike, getLikes }
+const addComment = async (req, res) => {
+
+    const commenterId = req.id
+    const { text, postId } = req.body
+
+    try {
+        if (!commenterId) {
+            return res.status(401).json({ message: 'user must log in first' })
+        }
+
+        const post = await postModel.findById(postId)
+
+        if (!post) {
+            return res.status(404).json({ message: 'post not found' })
+        }
+
+        const commentArray = post.comment;
+
+        commentArray.push({ text, commenterId })
+
+        await post.save()
+
+        return res.status(200).json(commentArray)
+
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ message: 'internal server error' })
+    }
+}
+
+const addReply = async (req, res) => {
+    const replierId = req.id
+    const { postId, commentId, reply } = req.body
+    try {
+        if (!replierId) {
+            return res.status(401).json({ message: "user must login first" })
+        }
+        const post = await postModel.findById(postId)
+
+        if (!post) {
+            return res.status(404).json({ message: 'post not found' })
+        }
+        const comment = post.comment.find(comment => comment._id.toString() === commentId)
+        comment.replies.push({ reply, replierId })
+
+        if (!comment) {
+            return res.status(404).json({ message: 'comment not found' })
+        }
+        await post.save()
+        return res.status(200).json(comment)
+
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ message: 'internal server error' })
+    }
+}
+
+const getComment = async (req, res) => {
+    const postId = req.params.id
+    try {
+        const post = await postModel.findById(postId).populate('comment.commenterId', 'profilePicture name jobTitle')
+        if (!post) {
+            return res.status(404).json({ message: 'Post not found' });
+        }
+        const comment = post.comment
+        return res.status(200).json(comment)
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ message: 'internal server error' })
+    }
+}
+
+const getReply = async (req, res) => {
+    const postId = req.params.id
+    try {
+        const post = await postModel.findById(postId).populate('comment.replies.replierId', 'profilePicture name jobTitle')
+        if (!post) {
+            return res.status(404).json({ message: 'Post not found' });
+        }
+        const reply = post.comment.map(comment => comment.replies).flat()
+        return res.status(200).json(reply)
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ message: 'internal server error' })
+    }
+}
+
+const editComment = async (req, res) => {
+
+    const { postId, commentId, text } = req.body
+    try {
+        const updateComment = await postModel.findByIdAndUpdate(
+            postId,
+            { $set: { 'comment.$[comment].text': text, } },
+            {
+                new: true,
+                arrayFilters: [{ 'comment._id': commentId }],
+                useFindAndModify: false,
+            },
+        )
+        if (!updateComment) {
+            return res.status(404).json({ message: 'post not found' })
+        }
+        return res.status(200).json(updateComment)
+    } catch (err) {
+        return res.status(500).json({ message: 'internal server error' })
+    }
+}
+
+const editReply = async (req, res) => {
+    const { postId, commentId, replyId, reply } = req.body
+    try {
+        const updateReply = await postModel.findByIdAndUpdate(
+            postId,
+            {
+                $set: { 'comment.$[comment].replies.$[reply].reply': reply }
+            },
+            {
+                new: true,
+                arrayFilters: [
+                    { 'comment._id': commentId },
+                    { 'reply._id': replyId },
+                ],
+                useFindAndModify: false,
+            }
+        )
+        if (!updateReply) {
+            return res.status(404).json({ message: 'post not found' })
+        }
+        return res.status(200).json(updateReply)
+    } catch (err) {
+        return res.status(500).json({ message: 'internal server error' })
+    }
+}
+
+const deleteComment = async (req, res) => {
+    const { postId, commentId } = req.body
+    try {
+
+        const comment = await postModel.findOneAndUpdate(
+            { _id: postId },
+            { $pull: { 'comment': { '_id': commentId } } },
+            { new: true, useFindAndModify: false }
+        )
+        if (!comment) {
+            return res.status(404).json({ message: 'post not found' })
+        }
+        return res.status(200).json({ message: 'comment deleted successfully' })
+    } catch (err) {
+        return res.status(500).json({ message: 'internal server error' })
+    }
+}
+
+const deleteReply = async (req, res) => {
+    const { postId, commentId, replyId } = req.body
+    try {
+        const reply = await postModel.findOneAndUpdate(
+            { _id: postId, 'comment._id': commentId },
+            {
+                $pull: { 'comment.$.replies': { '_id': replyId } }
+            },
+            { new: true, useFindAndModify: false }
+        )
+        if (!reply) {
+            return res.status(404).json({ message: 'post not found' })
+        }
+        return res.status(200).json({ message: 'reply deleted successfully' })
+    } catch (err) {
+        return res.status(500).json({ message: 'internal server error' })
+    }
+}
+
+module.exports = { addPost, getAllPosts, getPost, editPost, deletePost, addLike, getLikes, addComment, addReply, editComment, editReply, deleteComment, deleteReply, getComment, getReply }

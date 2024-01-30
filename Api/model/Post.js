@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const { Schema } = mongoose
 const reactionSchema = require('./Reaction')
+const repliesSchema = require('./Reply')
 
 const postSchema = mongoose.Schema({
 
@@ -33,19 +34,23 @@ const postSchema = mongoose.Schema({
     ,
     comment: [
         {
+            commenterId: {
+                type: Schema.Types.ObjectId,
+                ref: "User"
+            },
             text: {
                 type: String,
                 minLength: 1,
             },
+            photo:{
+                type:String,
+            },
+            reactions: [reactionSchema],
+            replies:[repliesSchema],
             created: {
                 type: Date,
                 default: Date.now
             },
-            commenter: {
-                type: Schema.Types.ObjectId,
-                ref: "User"
-            },
-            reactions: [reactionSchema]
         }
     ],
     repost: [{
