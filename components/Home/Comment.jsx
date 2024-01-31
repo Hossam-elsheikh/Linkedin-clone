@@ -20,7 +20,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 const Comment = ({ postId, commentInfo,myComment }) => {
   const [interactions, setInteractions] = useState("hidden");
-  const [commentOptions, setCommentOptions] = useState(false);
+  const [commentOptions, setCommentOptions] = useState(false); // copy this state
   const reactions = [
     { src: like, alt: "like" },
     { src: clap, alt: "clap" },
@@ -49,27 +49,9 @@ const Comment = ({ postId, commentInfo,myComment }) => {
       setInteractions("hidden");
     }, 300);
   }
-  useEffect(()=>{
-    if(!commentOptions)document.body.addEventListener('click',(e)=>{
-      let containsActiveClass = false;
-      let reviewNode = e.target;
-      
-      while (reviewNode.nodeName !== 'BODY') {
-      
-        if (reviewNode.classList.contains('options')) {
-          containsActiveClass = true;
-          break;
-        }
-        
-        reviewNode = reviewNode.parentNode;
-      }
-      
-      if (containsActiveClass === false) {
-        setCommentOptions(false)
-      }
-    })
-  },[commentOptions]);
-  const commentOptionsDropdownList = () => {
+  document.body.addEventListener('click',()=>{setCommentOptions(false)})  // copy this line
+  // copy this function
+  const commentOptionsDropdownList = () => { 
     return (
       <>
         {myComment  ? (
@@ -133,9 +115,7 @@ const Comment = ({ postId, commentInfo,myComment }) => {
       </>
     );
   };
-  //comment handlin'
-
-  //get comment
+ 
 
   return (
     <>
@@ -165,10 +145,14 @@ const Comment = ({ postId, commentInfo,myComment }) => {
               </div>
               <div className="flex text-gray-600 items-center gap-1 text-xs relative">
                 <p>1d</p>
+                {/* copy this function in onclick event */}
                 <MoreHorizIcon
                   className="hover:bg-gray-200 rounded-full cursor-pointer options"
-                  onClick={() => setCommentOptions(!commentOptions)}
+                  onClick={(e) => {setCommentOptions(!commentOptions)
+                    e.stopPropagation()}}  
                 />
+                    {/* copy this function in onclick event */}
+
                 {commentOptions && commentOptionsDropdownList()}
               </div>
             </div>

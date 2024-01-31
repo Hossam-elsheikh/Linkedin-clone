@@ -68,7 +68,9 @@ const Post = ({ post,myPost }) => {
       />
     );
   };
-
+document.body.addEventListener('click',()=>{
+  setOptions(false)
+})
   //like handling
   const { handleLikePost } = useLike();
   const dispatch = useDispatch();
@@ -180,7 +182,7 @@ const Post = ({ post,myPost }) => {
       </>
     );
   };
-  
+
   //delete post
   const [deletePost, setDeletePost] = useState([]);
   const handleDeletePost = async (postId) => {
@@ -212,7 +214,9 @@ const Post = ({ post,myPost }) => {
           <div className="flex gap-2 relative">
             <MoreHorizIcon
               className="hover:bg-gray-200 rounded-full text-gray-500 cursor-pointer postOptions"
-              onClick={() => setOptions(!optionsDisplay)}
+              onClick={(e) => {setOptions(!optionsDisplay)
+              e.stopPropagation()
+              }}
             />
             {optionsDisplay && postOptionsDropdownList()}
             <ClearIcon
