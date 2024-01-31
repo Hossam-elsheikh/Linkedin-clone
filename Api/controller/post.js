@@ -130,7 +130,7 @@ const getLikes = async (req, res) => {
 const addComment = async (req, res) => {
 
     const commenterId = req.id
-    const { text, postId } = req.body
+    const { comment, postId } = req.body
 
     try {
         if (!commenterId) {
@@ -145,7 +145,7 @@ const addComment = async (req, res) => {
 
         const commentArray = post.comment;
 
-        commentArray.push({ text, commenterId })
+        commentArray.push({ text:comment, commenterId })
 
         await post.save()
 

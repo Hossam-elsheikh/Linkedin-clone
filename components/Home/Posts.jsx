@@ -12,7 +12,7 @@ const Posts = () => {
       <PostForm />
 {
   posts.map(post => 
-    <Post key={post._id} post={post}/>
+    <Post key={post._id} post={post} myPost={()=>post.publisherId === Cookies.get('userId')}/>
   )
 }
 
