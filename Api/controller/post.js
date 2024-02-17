@@ -63,9 +63,54 @@ const deletePost = async (req, res) => {
     }
 }
 
+// const addLike = async (req, res) => {
+
+//     const { postId, reactionType } = req.body
+//     const userId = req.id
+
+//     try {
+//         if (!userId) {
+//             return res.status(401).json({ message: 'unauthorized: user must login first' })
+//         }
+
+//         const post = await postModel.findOne({ _id: postId })
+
+//         if (!post) {
+//             return res.status(404).json({ message: 'post not found' })
+//         }
+//         console.log('Received reactionType:', reactionType);
+
+//         if (!['like', 'clap', 'support', 'love', 'insightful', 'inquire'].includes(reactionType)) {
+//             return res.status(400).json({ message: 'invalid reaction type' })
+//         }
+
+//         const existingReaction = post.reactions.findIndex(reaction => reaction.userId.equals(userId))
+
+//         if (existingReaction !== -1) {
+//             if (post.reactions[existingReaction].reaction === reactionType) {
+//                 post.reactions.splice(existingReaction, 1)
+//             } else {
+//                 post.reactions[existingReaction].reaction = reactionType
+//             }
+//         } else {
+//             post.reactions.push({ userId, reaction: reactionType })
+//         }
+
+//         const updatePost = await post.save()
+
+//         // const response = {
+//         //     post: updatePost,
+//         //     likeCount: updatePost.reactions.length
+//         // }
+//         // res.json(response)
+//     } catch (err) {
+//         console.error(err);
+//         res.status(500).json({ message: 'Internal Server Error check api controller' });
+//     }
+// }
 const addLike = async (req, res) => {
 
-    const { postId, reactionType } = req.body
+    const { postId, commentId, reactionType } = req.body
     const userId = req.id
 
     try {
@@ -73,36 +118,62 @@ const addLike = async (req, res) => {
             return res.status(401).json({ message: 'unauthorized: user must login first' })
         }
 
-        const post = await postModel.findOne({ _id: postId })
-
-        if (!post) {
-            return res.status(404).json({ message: 'post not found' })
-        }
-        console.log('Received reactionType:', reactionType);
-
         if (!['like', 'clap', 'support', 'love', 'insightful', 'inquire'].includes(reactionType)) {
             return res.status(400).json({ message: 'invalid reaction type' })
         }
 
-        const existingReaction = post.reactions.findIndex(reaction => reaction.userId.equals(userId))
+        let post;
 
-        if (existingReaction !== -1) {
-            if (post.reactions[existingReaction].reaction === reactionType) {
-                post.reactions.splice(existingReaction, 1)
+        if (commentId) {
+            
+            post = await postModel.findOne({ 'comment._id': commentId })
+            if (!post) {
+                return res.status(404).json({ message: 'post or comment not found' })
+            }
+
+            const comment = post.comment.id(commentId)
+            if (!comment) {
+                return res.status(404).json({ message: 'comment not found this line what appears' })
+            }
+            const existingCommentReaction = comment.reactions.findIndex((reaction) => reaction.userId.equals(userId))
+
+            if (existingCommentReaction !== -1) {
+                if (comment.reactions[existingCommentReaction].reaction === reactionType) {
+                    comment.reactions.splice(existingCommentReaction, 1)
+                } else {
+                    comment.reactions[existingCommentReaction].reaction = reactionType
+                }
             } else {
-                post.reactions[existingReaction].reaction = reactionType
+                comment.reactions.push({ userId, reaction: reactionType })
+            }
+        }
+
+        else {
+        post = await postModel.findOne({ _id: postId })
+
+        if (!post) {
+            return res.status(404).json({ message: 'post not found' })
+        }
+
+        const existingPostReaction = post.reactions.findIndex((reaction) => reaction.userId.equals(userId))
+
+        if (existingPostReaction !== -1) {
+            if (post.reactions[existingPostReaction].reaction === reactionType) {
+                post.reactions.splice(existingPostReaction, 1)
+            } else {
+                post.reactions[existingPostReaction].reaction = reactionType
             }
         } else {
             post.reactions.push({ userId, reaction: reactionType })
         }
+    }
 
         const updatePost = await post.save()
 
-        // const response = {
-        //     post: updatePost,
-        //     likeCount: updatePost.reactions.length
-        // }
-        // res.json(response)
+        const response = {
+            post: updatePost,
+        }
+        res.json(response)
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Internal Server Error check api controller' });
@@ -145,7 +216,7 @@ const addComment = async (req, res) => {
 
         const commentArray = post.comment;
 
-        commentArray.push({ text:comment, commenterId })
+        commentArray.push({ text: comment, commenterId })
 
         await post.save()
 
@@ -170,7 +241,7 @@ const addReply = async (req, res) => {
             return res.status(404).json({ message: 'post not found' })
         }
         const comment = post.comment.find(comment => comment._id.toString() === commentId)
-        comment.replies.push({ reply, replierId })
+        comment.replies.push({ reply: reply.reply, image: reply.image, replierId })
 
         if (!comment) {
             return res.status(404).json({ message: 'comment not found' })
@@ -201,12 +272,17 @@ const getComment = async (req, res) => {
 
 const getReply = async (req, res) => {
     const postId = req.params.id
+    const commentId = req.params.commentId
     try {
         const post = await postModel.findById(postId).populate('comment.replies.replierId', 'profilePicture name jobTitle')
         if (!post) {
             return res.status(404).json({ message: 'Post not found' });
         }
-        const reply = post.comment.map(comment => comment.replies).flat()
+        const comment = post.comment.find(comment => comment._id.toString() === commentId)
+        if (!comment) {
+            return res.status(404).json({ message: 'comment not found' })
+        }
+        const reply = comment.replies
         return res.status(200).json(reply)
     } catch (err) {
         console.error(err);

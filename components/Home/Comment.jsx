@@ -18,7 +18,20 @@ import LinkIcon from "@mui/icons-material/Link";
 import FlagIcon from "@mui/icons-material/Flag";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import AddReply from "./AddReply";
+import useGetReply from '../useHooks/useGetReply'
+
 const Comment = ({ postId, commentInfo,myComment }) => {
+
+  const reply = useGetReply(postId, commentInfo._id)
+  // console.log(commentInfo);
+
+  const [showAddReply, setShowAddReply]=useState(false)
+
+  const handleShowAddReply=()=>{
+    setShowAddReply(!showAddReply)
+  }
+
   const [interactions, setInteractions] = useState("hidden");
   const [commentOptions, setCommentOptions] = useState(false); // copy this state
   const reactions = [
@@ -213,15 +226,21 @@ const Comment = ({ postId, commentInfo,myComment }) => {
               </p>
             </div>
             <p className=" cursor-pointer rounded ">|</p>
-            <p className="hover:bg-gray-200 cursor-pointer rounded px-1">
+            <button className="hover:bg-gray-200 cursor-pointer rounded px-1"onClick={handleShowAddReply}>
               Reply
-            </p>
+            </button>
             <p>-</p>
-            <p className=" cursor-pointer rounded px-1">
+            <p className=" cursor-pointer rounded px-1" >
               {commentInfo.replies?.length} Reply
             </p>
           </div>
-          <Reply postId={postId} />
+          {showAddReply && <AddReply postId={postId} commentId={commentInfo?._id}/>}
+
+      {reply.map((replyInfo) => (
+          // <Reply postId={postId} commentId={commentInfo._id}/>
+          <Reply key={replyInfo._id} postId={postId} replyInfo={replyInfo} commentId={commentInfo._id}/>
+      ))}
+
         </div>
       </div>
     </>

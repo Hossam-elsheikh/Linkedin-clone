@@ -17,6 +17,6 @@ router.patch('/editReply', auth, editReply)
 router.delete('/deleteComment', auth, deleteComment)
 router.delete('/deleteReply', auth, deleteReply)
 router.get('/getComment/:id', getComment)
-router.get('/getReply/:id', getReply)
+router.get('/:id/getReply/:commentId', getReply)
 
 module.exports = router

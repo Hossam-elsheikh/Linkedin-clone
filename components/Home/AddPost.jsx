@@ -16,18 +16,13 @@ import Cookies from "js-cookie";
 import useFetchUser from "../useHooks/useFetchUser";
 import axios from "axios";
 import useGetPosts from "../useHooks/useGetPosts";
-// import { useRouter } from "next/navigation";
 
 const AddPost = ({ onAddPost }) => {
 
-  // const router = useRouter()
 
   const userDetails = useFetchUser()
 
   const { setModal } = useContext(ModalContext);
-  console.log(setModal);
-
-  // const signedUser = useFetchUser()
 
   const [postContent, setPostContent] = useState('')
 
@@ -48,23 +43,7 @@ const AddPost = ({ onAddPost }) => {
         }]
       }
     }
-    // try {
-    //   const token = Cookies.get('token')
-    //   const response = await axios.post('http://localhost:4010/post/addpost',postData,{headers: {Authorization: token,}})
-    //   if (response.status ===200) {
-    //     setModal(false)
-    //   onAddPost(postData)
-    //   // console.log(onAddPost);
-    //   // onAddPost((prevPosts) => [...prevPosts, postData]);
-    //   // console.log(onAddPost);
-    //   setPostContent('')
-    //   console.log('Modal should be closed now');
-
-    //   }
-    //   else {
-    //   console.log('Post submission failed:', response.status, response.statusText);
-    //   }
-    // }
+    
     try {
       const token = Cookies.get('token');
       const response = await axios.post('http://localhost:4010/post/addpost', postData, { headers: { Authorization: token, } });
@@ -79,8 +58,6 @@ const AddPost = ({ onAddPost }) => {
     catch (error) {
       console.error(error);
     }
-    console.log(postData);
-
   }
 
 

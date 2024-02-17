@@ -9,7 +9,7 @@ import AddPost from "../Home/AddPost";
 import ShowAll from "@/app/ui/ShowAll";
 import clsx from "clsx";
 import Image from "next/image";
-import love from "../../public/love-circle.svg";
+// import love from "../../public/love-circle.svg";
 import like from "../../public/like-circle.svg";
 import support from "../../public/support-circle.svg";
 import useFetchUser from "../useHooks/useFetchUser";
@@ -63,7 +63,7 @@ const Activity = () => {
               <Image
                 width="17"
                 height="17"
-                src={love}
+                // src={love}
                 alt="love"
                 className="border-2 border-white -ml-1 rounded-full"
               />

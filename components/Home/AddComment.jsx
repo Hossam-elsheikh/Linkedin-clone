@@ -4,6 +4,7 @@ import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt
 import PhotoCameraBackIcon from '@mui/icons-material/PhotoCameraBack';
 import useComment from '../useHooks/useComment';
 const AddComment = ({publisherId,type,postId}) => {
+
   const [comment,setComment]=useState('')
   const {handleComment} = useComment()
 
