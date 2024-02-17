@@ -110,7 +110,7 @@ const deletePost = async (req, res) => {
 // }
 const addLike = async (req, res) => {
 
-    const { postId, commentId, reactionType } = req.body
+    const { postId, commentId, replyId, reactionType } = req.body
     const userId = req.id
 
     try {
@@ -125,7 +125,7 @@ const addLike = async (req, res) => {
         let post;
 
         if (commentId) {
-            
+
             post = await postModel.findOne({ 'comment._id': commentId })
             if (!post) {
                 return res.status(404).json({ message: 'post or comment not found' })
@@ -148,32 +148,57 @@ const addLike = async (req, res) => {
             }
         }
 
-        else {
-        post = await postModel.findOne({ _id: postId })
-
-        if (!post) {
-            return res.status(404).json({ message: 'post not found' })
-        }
-
-        const existingPostReaction = post.reactions.findIndex((reaction) => reaction.userId.equals(userId))
-
-        if (existingPostReaction !== -1) {
-            if (post.reactions[existingPostReaction].reaction === reactionType) {
-                post.reactions.splice(existingPostReaction, 1)
-            } else {
-                post.reactions[existingPostReaction].reaction = reactionType
+        if (commentId, replyId) {
+            post = await postModel.findOne({ 'comment.replies._id': replyId })
+            if (!post) {
+                return res.status(404).json({ message: 'post, comment or reply not found' })
             }
-        } else {
-            post.reactions.push({ userId, reaction: reactionType })
+            const comment = post.comment.id(commentId)
+            if(!comment){
+                return res.status(404).json({message:'comment not found'})
+            }
+            const reply = comment.replies.id(replyId)
+            if (!reply) {
+                return res.status(404).json({ message: 'reply not found' })
+            }
+            const existingReplyReaction = reply.reactions.findIndex((reaction) => reaction.userId.equals(userId))
+            if (existingReplyReaction !== -1) {
+                if (reply.reactions[existingReplyReaction].reaction === reactionType) {
+                    reply.reactions.splice(existingReplyReaction, 1)
+                } else {
+                    reply.reactions[existingReplyReaction].reaction = reactionType
+                }
+            } else {
+                reply.reactions.push({ userId, reaction: reactionType })
+            }
         }
-    }
+
+        else {
+            post = await postModel.findOne({ _id: postId })
+
+            if (!post) {
+                return res.status(404).json({ message: 'post not found' })
+            }
+
+            const existingPostReaction = post.reactions.findIndex((reaction) => reaction.userId.equals(userId))
+
+            if (existingPostReaction !== -1) {
+                if (post.reactions[existingPostReaction].reaction === reactionType) {
+                    post.reactions.splice(existingPostReaction, 1)
+                } else {
+                    post.reactions[existingPostReaction].reaction = reactionType
+                }
+            } else {
+                post.reactions.push({ userId, reaction: reactionType })
+            }
+        }
 
         const updatePost = await post.save()
 
-        const response = {
-            post: updatePost,
-        }
-        res.json(response)
+        // const response = {
+        //     post: updatePost,
+        // }
+        // res.json(response)
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Internal Server Error check api controller' });
