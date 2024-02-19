@@ -150,13 +150,11 @@ const addLike = async (req, res) => {
 
         else if (commentId) {
             post = await postModel.findOne({ 'comment._id': commentId })
-            console.log(post);
             if (!post) {
                 return res.status(404).json({ message: 'post or comment not found' })
             }
 
             const comment = post.comment.id(commentId)
-            console.log(comment);
             if (!comment) {
                 return res.status(404).json({ message: 'comment not found this line what appears' })
             }
@@ -206,20 +204,38 @@ const addLike = async (req, res) => {
 }
 
 const getLikes = async (req, res) => {
-    const postId = req.params.id;
+    const {replyId,commentId,postId} = req.params;
+    console.log('post id:',postId);
+    console.log('comment id:',commentId);
+    console.log('reply id:',replyId);
 
     try {
-        const post = await postModel.findById(postId).populate('reactions.userId', 'name jobTitle profilePicture');
+        let target
+        const post = await postModel.findById(postId)
+        if(commentId&&replyId){
+            target = await postModel.findOne({'comment.replies._id':replyId}).populate('reactions.userId','name jobTitle profilePicture')
+            // console.log(target.comment,'thisssssssssssssss');
+            const comment = post.comment.id(commentId)
+            console.log(comment);
 
-        if (!post) {
-            return res.status(404).json({ message: 'Post not found' });
+
+
         }
-
-        const likes = post.reactions;
+        else if(commentId){
+            target = await postModel.findOne({'comment._id':commentId}).populate('reactions.userId','name jobTitle profilePicture')
+        }
+        else{
+            target = await postModel.findById(postId).populate('reactions.userId', 'name jobTitle profilePicture');
+        }
+        if (!target) {
+            return res.status(404).json({ message: 'target not found' });
+        }
+        const likes = target.reactions;
+        console.log(likes);
         return res.status(200).json(likes);
     } catch (err) {
         console.error(err);
-        return res.status(500).json({ message: 'Internal Server Error' });
+        return res.status(500).json({ message: 'Internal Server Error check controller' });
     }
 };
 

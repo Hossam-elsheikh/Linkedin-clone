@@ -203,6 +203,7 @@ document.body.addEventListener('click',()=>{
   return (
     <>
       <Container className="px-0 py-2 " key={post._id}>
+        {post._id}
         <div className="flex justify-between px-3 py-2">
           <UserCircle
             name={post.publisherId.name}

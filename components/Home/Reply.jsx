@@ -90,6 +90,7 @@ const Reply = ({ postId, replyInfo, commentId }) => {
                   <Link href='#' className="font-semibold text-sm text-gray-600 hover:text-blue-600">
                     {replyInfo.replierId?.name}
                   </Link>
+                  {replyInfo._id}
                   <p className="text-xs text-gray-500">{replyInfo.replierId?.jobTitle}</p>
                 </div>
                 <div className="flex text-gray-600 items-center gap-1 text-xs">

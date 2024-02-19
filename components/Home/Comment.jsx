@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import ClearIcon from "@mui/icons-material/Clear";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import likeCircle from "../../public/like-circle.svg";
@@ -24,6 +24,7 @@ import { useDispatch } from "react-redux";
 // import useLike from "../useHooks/useLike";
 import useLike from "../useHooks/useLike";
 import { selectComment } from "@/redux/slice/commentIdSlice";
+import { ModalContext } from "@/context/ModalContext";
 
 const Comment = ({ postId, commentInfo,myComment }) => {
 
@@ -59,12 +60,14 @@ const Comment = ({ postId, commentInfo,myComment }) => {
     );
   };
     //handle like for comment
-  // const dispatch = useDispatch()
+  const dispatch = useDispatch()
   const {handleLikeComment} = useLike()
-  // const pushCommentId=(commentId)=>{
-  // dispatch(selectComment(commentId))
-  // console.log(commentId);
-  // }
+  const pushCommentId=(commentId)=>{
+  dispatch(selectComment(commentId))
+  console.log(commentId);
+  }
+  const {setModal}=useContext(ModalContext)
+  
   function showInteractions() {
     setTimeout(() => {
       setInteractions("block");
@@ -155,7 +158,7 @@ const Comment = ({ postId, commentInfo,myComment }) => {
             width: "40px",
             height: "40px",
           }}
-        />
+          />
         <div className="flex flex-col w-full">
           <div className="p-2 bg-stone-100 rounded rounded-tl-none w-full flex flex-col">
             {/* Commenter Details */}
@@ -164,10 +167,11 @@ const Comment = ({ postId, commentInfo,myComment }) => {
                 <Link
                   href="#"
                   className="font-semibold text-sm text-gray-600 hover:text-blue-600"
-                >
+                  >
                   {/* Essam Konafa */}
                   {commentInfo.commenterId?.name}
                 </Link>
+                  {commentInfo._id}
                 <p className="text-xs text-gray-500">
                   {commentInfo.commenterId?.jobTitle}
                 </p>
@@ -214,8 +218,13 @@ const Comment = ({ postId, commentInfo,myComment }) => {
               Like press me
             </p>
             <p>-</p>
-            <div className="flex items-center ">
-              <div className="flex pl-1">
+            <div className="flex items-center cursor-pointer">
+              <div 
+              className="flex pl-1"
+              onClick={()=>{
+                setModal("SHOWLIKES")
+              }}
+              >
                 <Image
                   width="17"
                   height="17"
@@ -238,7 +247,7 @@ const Comment = ({ postId, commentInfo,myComment }) => {
                   className="border-2 border-white -ml-1 rounded-full"
                 />
               </div>
-              <p className=" cursor-pointer rounded px-1">
+              <p className="rounded px-1">
               {/* <p className=" cursor-pointer rounded px-1" onClick={pushCommentId(commentInfo.id)}> */}
                 {commentInfo.reactions?.length}
               </p>

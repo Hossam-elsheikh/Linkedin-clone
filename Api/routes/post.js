@@ -9,7 +9,7 @@ router.get('/getPost/:id', getPost)
 router.patch('/editPost/:id', editPost)
 router.delete('/deletePost/:id', deletePost)
 router.put('/addLike', auth, addLike)
-router.get('/getLikes/:id', getLikes)
+router.get('/getLikes/:postId/:commentId?/:replyId?', getLikes);
 router.post('/addComment', auth, addComment)
 router.post('/addReply', auth, addReply)
 router.patch('/editComment', auth, editComment)
