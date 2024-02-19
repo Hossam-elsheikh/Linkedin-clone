@@ -72,8 +72,8 @@ document.body.addEventListener('click',()=>{
   setOptions(false)
 })
   //like handling
-  const { handleLikePost } = useLike();
   const dispatch = useDispatch();
+  const { handleLikePost } = useLike();
   const handlePushingPostId = (postId) => {
     dispatch(selectPost(postId));
   };

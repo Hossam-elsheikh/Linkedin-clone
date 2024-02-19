@@ -110,9 +110,8 @@ const deletePost = async (req, res) => {
 // }
 const addLike = async (req, res) => {
 
-    const { postId, commentId, replyId, reactionType } = req.body
+    const { postId, commentId,replyId, reactionType } = req.body
     const userId = req.id
-
     try {
         if (!userId) {
             return res.status(401).json({ message: 'unauthorized: user must login first' })
@@ -124,31 +123,7 @@ const addLike = async (req, res) => {
 
         let post;
 
-        if (commentId) {
-
-            post = await postModel.findOne({ 'comment._id': commentId })
-            if (!post) {
-                return res.status(404).json({ message: 'post or comment not found' })
-            }
-
-            const comment = post.comment.id(commentId)
-            if (!comment) {
-                return res.status(404).json({ message: 'comment not found this line what appears' })
-            }
-            const existingCommentReaction = comment.reactions.findIndex((reaction) => reaction.userId.equals(userId))
-
-            if (existingCommentReaction !== -1) {
-                if (comment.reactions[existingCommentReaction].reaction === reactionType) {
-                    comment.reactions.splice(existingCommentReaction, 1)
-                } else {
-                    comment.reactions[existingCommentReaction].reaction = reactionType
-                }
-            } else {
-                comment.reactions.push({ userId, reaction: reactionType })
-            }
-        }
-
-        if (commentId, replyId) {
+        if (commentId && replyId) {
             post = await postModel.findOne({ 'comment.replies._id': replyId })
             if (!post) {
                 return res.status(404).json({ message: 'post, comment or reply not found' })
@@ -173,6 +148,31 @@ const addLike = async (req, res) => {
             }
         }
 
+        else if (commentId) {
+            post = await postModel.findOne({ 'comment._id': commentId })
+            console.log(post);
+            if (!post) {
+                return res.status(404).json({ message: 'post or comment not found' })
+            }
+
+            const comment = post.comment.id(commentId)
+            console.log(comment);
+            if (!comment) {
+                return res.status(404).json({ message: 'comment not found this line what appears' })
+            }
+            const existingCommentReaction = comment.reactions.findIndex((reaction) => reaction.userId.equals(userId))
+
+            if (existingCommentReaction !== -1) {
+                if (comment.reactions[existingCommentReaction].reaction === reactionType) {
+                    comment.reactions.splice(existingCommentReaction, 1)
+                } else {
+                    comment.reactions[existingCommentReaction].reaction = reactionType
+                }
+            } else {
+                comment.reactions.push({ userId, reaction: reactionType })
+            }
+        }
+        
         else {
             post = await postModel.findOne({ _id: postId })
 

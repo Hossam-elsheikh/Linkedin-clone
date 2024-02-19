@@ -14,10 +14,12 @@ import Link from "next/link";
 import { Avatar } from "@mui/material";
 import useGetReply from '../useHooks/useGetReply'
 import AddReply from './AddReply';
+import { useDispatch } from 'react-redux';
+import useLike from '../useHooks/useLike';
 
 const Reply = ({ postId, replyInfo, commentId }) => {
 
-  // console.log(commentId);
+  // console.log(postId);
 
   const [showAddReply, setShowAddReply] = useState(false)
   const handleShowAddReply = () => {
@@ -26,13 +28,20 @@ const Reply = ({ postId, replyInfo, commentId }) => {
 
   const [interactions, setInteractions] = useState('hidden')
   const reactions = [
-    { src: like, alt: 'like' },
-    { src: clap, alt: 'clap' },
-    { src: support, alt: 'support' },
-    { src: insightful, alt: 'insightful' },
-    { src: inquire, alt: 'inquire' },
+    // { src: like, alt: 'like' },
+    // { src: clap, alt: 'clap' },
+    // { src: support, alt: 'support' },
+    // { src: insightful, alt: 'insightful' },
+    // { src: inquire, alt: 'inquire' },
+    { src: like, alt: "like", textClr: "text-blue-600" },
+    { src: clap, alt: "clap", textClr: "text-orange-800" },
+    { src: support, alt: "support", textClr: "text-red-800" },
+    // {src:love,alt:'love'},
+    { src: insightful, alt: "insightful", textClr: "text-yellow-600" },
+    { src: inquire, alt: "inquire", textClr: "text-yellow-700" },
   ]
-  const ReactionDiv = (reaction) => {
+  
+  const ReactionDiv = (reaction,replyId,commentId,postId) => {
     return (
       <Image
         width='55'
@@ -40,9 +49,13 @@ const Reply = ({ postId, replyInfo, commentId }) => {
         alt={reaction.alt}
         key={reaction.alt}
         className="py-2 px-2"
+        onClick={()=>handleLikeReply(reaction.alt,replyId,commentId,postId)}
       />
     )
   }
+  //handle like for reply
+  const {handleLikeReply}=useLike()
+
   function showInteractions() {
     setTimeout(() => {
 
@@ -98,10 +111,10 @@ const Reply = ({ postId, replyInfo, commentId }) => {
                 onMouseEnter={() => { showInteractions() }}
                 onMouseLeave={() => { hideInteractions() }}
               >
-                {reactions.map((reaction) => ReactionDiv(reaction))}
+                {reactions.map((reaction) => ReactionDiv(reaction,replyInfo._id,commentId,postId))}
               </div>
               <p className="hover:bg-gray-200 cursor-pointer rounded px-1" onMouseOver={() => showInteractions()}
-                onMouseOut={() => hideInteractions()}>Like</p>
+                onMouseOut={() => hideInteractions()} onClick={()=>handleLikeReply('like',replyInfo._id,commentId,postId)}>Like press me</p>
               <p>-</p>
               <div className="flex items-center ">
                 <div className="flex pl-1">

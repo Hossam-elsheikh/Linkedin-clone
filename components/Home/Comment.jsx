@@ -20,6 +20,10 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddReply from "./AddReply";
 import useGetReply from '../useHooks/useGetReply'
+import { useDispatch } from "react-redux";
+// import useLike from "../useHooks/useLike";
+import useLike from "../useHooks/useLike";
+import { selectComment } from "@/redux/slice/commentIdSlice";
 
 const Comment = ({ postId, commentInfo,myComment }) => {
 
@@ -35,13 +39,14 @@ const Comment = ({ postId, commentInfo,myComment }) => {
   const [interactions, setInteractions] = useState("hidden");
   const [commentOptions, setCommentOptions] = useState(false); // copy this state
   const reactions = [
-    { src: like, alt: "like" },
-    { src: clap, alt: "clap" },
-    { src: support, alt: "support" },
-    { src: insightful, alt: "insightful" },
-    { src: inquire, alt: "inquire" },
+    { src: like, alt: "like", textClr: "text-blue-600" },
+    { src: clap, alt: "clap", textClr: "text-orange-800" },
+    { src: support, alt: "support", textClr: "text-red-800" },
+    // {src:love,alt:'love'},
+    { src: insightful, alt: "insightful", textClr: "text-yellow-600" },
+    { src: inquire, alt: "inquire", textClr: "text-yellow-700" },
   ];
-  const ReactionDiv = (reaction) => {
+  const ReactionDiv = (reaction,postId,commentId) => {
     return (
       <Image
         width="55"
@@ -49,9 +54,17 @@ const Comment = ({ postId, commentInfo,myComment }) => {
         alt={reaction.alt}
         key={reaction.alt}
         className="py-2 px-2"
+        onClick={() => handleLikeComment(reaction.alt,postId,commentId)}
       />
     );
   };
+    //handle like for comment
+  // const dispatch = useDispatch()
+  const {handleLikeComment} = useLike()
+  // const pushCommentId=(commentId)=>{
+  // dispatch(selectComment(commentId))
+  // console.log(commentId);
+  // }
   function showInteractions() {
     setTimeout(() => {
       setInteractions("block");
@@ -129,6 +142,9 @@ const Comment = ({ postId, commentInfo,myComment }) => {
     );
   };
  
+  
+
+  
 
   return (
     <>
@@ -187,14 +203,15 @@ const Comment = ({ postId, commentInfo,myComment }) => {
                 hideInteractions();
               }}
             >
-              {reactions.map((reaction) => ReactionDiv(reaction))}
+              {reactions.map((reaction) => ReactionDiv(reaction,postId,commentInfo._id))}
             </div>
             <p
               className="hover:bg-gray-200 cursor-pointer rounded px-1"
               onMouseOver={() => showInteractions()}
               onMouseOut={() => hideInteractions()}
+              onClick={()=> handleLikeComment('like',postId,commentInfo._id,)}
             >
-              Like
+              Like press me
             </p>
             <p>-</p>
             <div className="flex items-center ">
@@ -222,6 +239,7 @@ const Comment = ({ postId, commentInfo,myComment }) => {
                 />
               </div>
               <p className=" cursor-pointer rounded px-1">
+              {/* <p className=" cursor-pointer rounded px-1" onClick={pushCommentId(commentInfo.id)}> */}
                 {commentInfo.reactions?.length}
               </p>
             </div>
