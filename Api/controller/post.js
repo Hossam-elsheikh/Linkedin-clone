@@ -110,7 +110,7 @@ const deletePost = async (req, res) => {
 // }
 const addLike = async (req, res) => {
 
-    const { postId, commentId,replyId, reactionType } = req.body
+    const { postId, commentId, replyId, reactionType } = req.body
     const userId = req.id
     try {
         if (!userId) {
@@ -129,8 +129,8 @@ const addLike = async (req, res) => {
                 return res.status(404).json({ message: 'post, comment or reply not found' })
             }
             const comment = post.comment.id(commentId)
-            if(!comment){
-                return res.status(404).json({message:'comment not found'})
+            if (!comment) {
+                return res.status(404).json({ message: 'comment not found' })
             }
             const reply = comment.replies.id(replyId)
             if (!reply) {
@@ -170,7 +170,7 @@ const addLike = async (req, res) => {
                 comment.reactions.push({ userId, reaction: reactionType })
             }
         }
-        
+
         else {
             post = await postModel.findOne({ _id: postId })
 
@@ -204,35 +204,50 @@ const addLike = async (req, res) => {
 }
 
 const getLikes = async (req, res) => {
-    const {replyId,commentId,postId} = req.params;
-    console.log('post id:',postId);
-    console.log('comment id:',commentId);
-    console.log('reply id:',replyId);
+    const { replyId, commentId, postId } = req.params;
+    // console.log('post id:', postId);
+    // console.log('comment id:', commentId);
+    // console.log('reply id:', replyId);
 
     try {
         let target
-        const post = await postModel.findById(postId)
-        if(commentId&&replyId){
-            target = await postModel.findOne({'comment.replies._id':replyId}).populate('reactions.userId','name jobTitle profilePicture')
-            // console.log(target.comment,'thisssssssssssssss');
-            const comment = post.comment.id(commentId)
-            console.log(comment);
 
+        // const post = await postModel.findById(postId)
+        // console.log(post.comment?._id,'هنا بنشيك');
+        // const projection = 'reactions.userId reactions.type';
 
+        if (commentId && replyId) {
+            // const comment = post.comment.id(commentId)
+            // const reply = comment.replies.id(replyId)
 
+            target = await postModel.findOne({ 'comment.replies._id': replyId })
+                                    .populate({path:'comment.replies.reactions.userId',select:'name jobTitle profilePicture'})
+            // console.log(target);
+            // console.log(reply.reactions);
+            // console.log(comment.replies._id,'thisssssssssssssss');
+            // console.log(comment);
+            // const repliesReactions = target
+            // return res.status(200).json(repliesReactions)
         }
-        else if(commentId){
-            target = await postModel.findOne({'comment._id':commentId}).populate('reactions.userId','name jobTitle profilePicture')
+
+        else if (commentId) {
+            target = await postModel.findOne({ 'comment._id': commentId })
+                                    .populate({path:'reactions.userId', select:'name jobTitle profilePicture'})
         }
-        else{
-            target = await postModel.findById(postId).populate('reactions.userId', 'name jobTitle profilePicture');
+
+        else {
+            target = await postModel.findById(postId).populate({path:'reactions.userId', select:'name jobTitle profilePicture'});
         }
+
         if (!target) {
             return res.status(404).json({ message: 'target not found' });
         }
-        const likes = target.reactions;
-        console.log(likes);
-        return res.status(200).json(likes);
+
+        // const likes = target.reactions;
+        // console.log(likes);
+        // return res.status(200).json(likes);
+        return res.status(200).json(target);
+
     } catch (err) {
         console.error(err);
         return res.status(500).json({ message: 'Internal Server Error check controller' });

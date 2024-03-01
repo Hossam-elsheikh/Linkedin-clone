@@ -26,14 +26,14 @@ import useLike from "../useHooks/useLike";
 import { selectComment } from "@/redux/slice/commentIdSlice";
 import { ModalContext } from "@/context/ModalContext";
 
-const Comment = ({ postId, commentInfo,myComment }) => {
+const Comment = ({ postId, commentInfo, myComment }) => {
 
   const reply = useGetReply(postId, commentInfo._id)
   // console.log(commentInfo);
 
-  const [showAddReply, setShowAddReply]=useState(false)
+  const [showAddReply, setShowAddReply] = useState(false)
 
-  const handleShowAddReply=()=>{
+  const handleShowAddReply = () => {
     setShowAddReply(!showAddReply)
   }
 
@@ -47,7 +47,7 @@ const Comment = ({ postId, commentInfo,myComment }) => {
     { src: insightful, alt: "insightful", textClr: "text-yellow-600" },
     { src: inquire, alt: "inquire", textClr: "text-yellow-700" },
   ];
-  const ReactionDiv = (reaction,postId,commentId) => {
+  const ReactionDiv = (reaction, postId, commentId) => {
     return (
       <Image
         width="55"
@@ -55,19 +55,20 @@ const Comment = ({ postId, commentInfo,myComment }) => {
         alt={reaction.alt}
         key={reaction.alt}
         className="py-2 px-2"
-        onClick={() => handleLikeComment(reaction.alt,postId,commentId)}
+        onClick={() => handleLikeComment(reaction.alt, postId, commentId)}
       />
     );
   };
-    //handle like for comment
+  //handle like for comment
   const dispatch = useDispatch()
-  const {handleLikeComment} = useLike()
-  const pushCommentId=(commentId)=>{
-  dispatch(selectComment(commentId))
-  console.log(commentId);
+  const { handleLikeComment } = useLike()
+  const pushCommentId = (commentId) => {
+    dispatch(selectComment(commentId))
+    console.log(commentId);
   }
-  const {setModal}=useContext(ModalContext)
-  
+
+  const { setModal } = useContext(ModalContext)
+
   function showInteractions() {
     setTimeout(() => {
       setInteractions("block");
@@ -78,12 +79,12 @@ const Comment = ({ postId, commentInfo,myComment }) => {
       setInteractions("hidden");
     }, 300);
   }
-  document.body.addEventListener('click',()=>{setCommentOptions(false)})  // copy this line
+  document.body.addEventListener('click', () => { setCommentOptions(false) })  // copy this line
   // copy this function
-  const commentOptionsDropdownList = () => { 
+  const commentOptionsDropdownList = () => {
     return (
       <>
-        {myComment  ? (
+        {myComment ? (
           <div
             className={`bg-white shadow-lg border w-52  z-20 flex  flex-col absolute top-5 right-0`}
             onClick={() => setCommentOptions(false)}
@@ -94,7 +95,7 @@ const Comment = ({ postId, commentInfo,myComment }) => {
             >
               <EditIcon
                 fontSize="small"
-                // style={{ transform: "rotate(90deg)" }}
+              // style={{ transform: "rotate(90deg)" }}
               />
               <p>Edit</p>
             </button>
@@ -144,10 +145,10 @@ const Comment = ({ postId, commentInfo,myComment }) => {
       </>
     );
   };
- 
-  
 
-  
+
+
+
 
   return (
     <>
@@ -158,7 +159,7 @@ const Comment = ({ postId, commentInfo,myComment }) => {
             width: "40px",
             height: "40px",
           }}
-          />
+        />
         <div className="flex flex-col w-full">
           <div className="p-2 bg-stone-100 rounded rounded-tl-none w-full flex flex-col">
             {/* Commenter Details */}
@@ -167,11 +168,11 @@ const Comment = ({ postId, commentInfo,myComment }) => {
                 <Link
                   href="#"
                   className="font-semibold text-sm text-gray-600 hover:text-blue-600"
-                  >
+                >
                   {/* Essam Konafa */}
                   {commentInfo.commenterId?.name}
                 </Link>
-                  {commentInfo._id}
+                {commentInfo._id}
                 <p className="text-xs text-gray-500">
                   {commentInfo.commenterId?.jobTitle}
                 </p>
@@ -181,10 +182,12 @@ const Comment = ({ postId, commentInfo,myComment }) => {
                 {/* copy this function in onclick event */}
                 <MoreHorizIcon
                   className="hover:bg-gray-200 rounded-full cursor-pointer options"
-                  onClick={(e) => {setCommentOptions(!commentOptions)
-                    e.stopPropagation()}}  
+                  onClick={(e) => {
+                    setCommentOptions(!commentOptions)
+                    e.stopPropagation()
+                  }}
                 />
-                    {/* copy this function in onclick event */}
+                {/* copy this function in onclick event */}
 
                 {commentOptions && commentOptionsDropdownList()}
               </div>
@@ -207,23 +210,25 @@ const Comment = ({ postId, commentInfo,myComment }) => {
                 hideInteractions();
               }}
             >
-              {reactions.map((reaction) => ReactionDiv(reaction,postId,commentInfo._id))}
+              {reactions.map((reaction) => ReactionDiv(reaction, postId, commentInfo._id))}
             </div>
             <p
               className="hover:bg-gray-200 cursor-pointer rounded px-1"
               onMouseOver={() => showInteractions()}
               onMouseOut={() => hideInteractions()}
-              onClick={()=> handleLikeComment('like',postId,commentInfo._id,)}
+              onClick={() => handleLikeComment('like', postId, commentInfo._id,)}
             >
               Like press me
             </p>
             <p>-</p>
             <div className="flex items-center cursor-pointer">
-              <div 
-              className="flex pl-1"
-              onClick={()=>{
-                setModal("SHOWLIKES")
-              }}
+
+              <div
+                className="flex pl-1"
+                onClick={() => {
+                  setModal("SHOWLIKES")
+                  pushCommentId(commentInfo._id)
+                }}
               >
                 <Image
                   width="17"
@@ -248,12 +253,12 @@ const Comment = ({ postId, commentInfo,myComment }) => {
                 />
               </div>
               <p className="rounded px-1">
-              {/* <p className=" cursor-pointer rounded px-1" onClick={pushCommentId(commentInfo.id)}> */}
+                {/* <p className=" cursor-pointer rounded px-1" onClick={pushCommentId(commentInfo.id)}> */}
                 {commentInfo.reactions?.length}
               </p>
             </div>
             <p className=" cursor-pointer rounded ">|</p>
-            <button className="hover:bg-gray-200 cursor-pointer rounded px-1"onClick={handleShowAddReply}>
+            <button className="hover:bg-gray-200 cursor-pointer rounded px-1" onClick={handleShowAddReply}>
               Reply
             </button>
             <p>-</p>
@@ -261,12 +266,12 @@ const Comment = ({ postId, commentInfo,myComment }) => {
               {commentInfo.replies?.length} Reply
             </p>
           </div>
-          {showAddReply && <AddReply postId={postId} commentId={commentInfo?._id}/>}
+          {showAddReply && <AddReply postId={postId} commentId={commentInfo?._id} />}
 
-      {reply.map((replyInfo) => (
-          // <Reply postId={postId} commentId={commentInfo._id}/>
-          <Reply key={replyInfo._id} postId={postId} replyInfo={replyInfo} commentId={commentInfo._id}/>
-      ))}
+          {reply.map((replyInfo) => (
+            // <Reply postId={postId} commentId={commentInfo._id}/>
+            <Reply key={replyInfo._id} postId={postId} replyInfo={replyInfo} commentId={commentInfo._id} />
+          ))}
 
         </div>
       </div>
