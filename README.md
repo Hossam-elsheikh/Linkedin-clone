@@ -1,16 +1,16 @@
 # sync is a website based on linkedin
 ## the project still under development
-## Completed Features:
+# Completed Features:
 ## Signup/Signin:
 Seamless account creation and login processes for a user-friendly onboarding.
 ## User Profile Management:
 Dynamic user profile display, showcasing fetched information elegantly.
 ## creating posts with all features
 make post/comment/reply/like for each of them
-## upcoming features:
-## connections
-## chat app with socket
-## notifications with socket
+# upcoming features:
+## 1- connections
+## 2- chat app with socket
+## 3- notifications with socket
 
 ![Screenshot 2024-02-16 202634](https://github.com/EssamKonafa/Sync/assets/128749610/2f4d6d90-7f07-4c7d-a261-8c5e5fe58ccf)
 
